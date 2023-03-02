@@ -166,9 +166,10 @@ Dessa maneira essa será a arquitetura a ser impantada em TODA ATIVIDADE será:
 
 ![arquitetura-base](./assets/arquitetura-base.png)
 
-Exemplos de referência:
+Exemplos e docs de referência:
 
 - https://github.com/rjsabia/captionApp (JS)
+- https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/labels.html (Trabalhando com Rótulos)
 - https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/service_code_examples.html (Exemplos de código)
 
 ## Atividade -> Parte 2
@@ -219,9 +220,9 @@ Resposta a ser entregue quando não houver face (exatamente neste formato):
 }
 ```
 
-Exemplos de referência:
+Exemplos e docs de referência:
 
-- https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html
+- https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html (Trabalhando com Faces)
 - https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/service_code_examples.html (Exemplos de código)
 
 ## Atividade -> Parte 3
@@ -252,9 +253,9 @@ Resposta a ser entregue (exatamente neste formato):
 }
 ```
 
-Exemplos de referência:
+Exemplos e docs de referência:
 
-- https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html
+- https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html (Trabalhando com Faces)
 - https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/service_code_examples.html (Exemplos de código)
 
 ---
