@@ -297,3 +297,11 @@ Exemplos e docs de referência:
   - como utilizar o sistema
   - 🔨 código fonte desenvolvido (Sugestão: pasta `src`)
 - O prazo de entrega é até às 12h do dia 13/02/2023 no repositório do github ([https://github.com/Compass-pb-aws-2022-IFCE/sprint-8-pb-aws-ifce](https://github.com/Compass-pb-aws-2022-IFCE/sprint-8-pb-aws-ifce)).
+
+
+## Equipe
+
+- Luan Ferreira
+- Mylena Soares
+- Humberto Sampaio
+- Edivalço Araújo
