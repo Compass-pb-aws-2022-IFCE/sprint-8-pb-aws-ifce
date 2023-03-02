@@ -288,7 +288,7 @@ Exemplos e docs de referência:
 ## Entrega
 
 - Aceitar o convite do repositório da sprint-8-pb-aws-ifce;
-- **O trabalho deve ser feito em grupos de quatro pessoas**;v1
+- **O trabalho deve ser feito em grupos de quatro pessoas**;
   - Evitar repetições de grupos da sprint anterior;
 - Criar uma branch no repositório com o formato grupo-número (Exemplo: grupo-1);
 - Subir o trabalho na branch com um [Readme.md](README.md)
