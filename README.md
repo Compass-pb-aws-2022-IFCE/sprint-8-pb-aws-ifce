@@ -116,7 +116,7 @@ functions:
 
 ---
 
-Após conseguir rodar o projeto base o objetivo final será divida em duas partes:
+Após conseguir rodar o projeto base o objetivo final será divida em três partes:
 
 ## Atividade -> Parte 1
 
