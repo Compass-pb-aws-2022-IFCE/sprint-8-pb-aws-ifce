@@ -249,7 +249,7 @@ Resposta a ser entregue (exatamente neste formato):
   "url_to_image": "https://myphotos/test-happy.jpg",
   "created_image": "02-02-2023 17:00:00",
   "classified_emotion": "HAPPY",
-  "classified_emotion_condidence": 0.92965151369571686,
+  "classified_emotion_condidence": 99.92965151369571686,
 }
 ```
 
