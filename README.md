@@ -237,7 +237,7 @@ Exemplos e docs de referência:
 ```
 
 - Essa imagem deverá estar no S3 (faça o upload manualmente)
-- Nesta versão deverão ser implementados novos campos de retorno que definirá qual a EMOÇÂO PRINCIPAL classificda pelo modelo (maior confiança).
+- Nesta versão deverão ser implementados novos campos de retorno que definirá qual a EMOÇÂO PRINCIPAL classificada pelo modelo (maior confiança).
 - Para isso utilize um dos modelos que identificam faces do rekognition.
 - O resultado (body) da chamada do Rekognition deverá ser logado na aplicação. utilize: `print(body)`
 - Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
