@@ -24,3 +24,21 @@ functions:
       - httpApi:
           path: /v2
           method: get
+  v1Vision:
+    handler: routes/rota1.v1Vision
+    events:
+      - httpApi:
+          path: /v1/vision
+          method: post
+  v2Vision:
+    handler: routes/rota2.v2Vision
+    events:
+      - httpApi:
+          path: /v2/vision
+          method: post
+  v3Vision:
+    handler: routes/rota3.v3Vision
+    events:
+      - httpApi:
+          path: /v3/vision
+          method: post          
