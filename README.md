@@ -1,8 +1,36 @@
-# Avaliação Sprint 8 - Programa de Bolsas Compass.uol / AWS e IFCE
+# Avaliação Sprint 8 - Programa de Bolsas Compass UOL / AWS e IFCE
 
-Avaliação da oitava sprint do programa de bolsas Compass.uol para formação em machine learning para AWS.
+[![N|Solid](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/LogoCompasso-positivo.png/440px-LogoCompasso-positivo.png)](https://compass.uol/pt/home/)
+
+Avaliação da oitava sprint do programa de bolsas Compass UOL para formação em machine learning para AWS.
 
 ---
+
+## Sumário
+- [Objetivo](#objetivo)
+- [Ferramentas](#ferramentas)
+- [Equipe](#equipe)
+
+---
+
+## Objetivo
+
+Utilizar do AWS Rekognition para analisar as características de uma imagem salva no S3 e armazenar as mesmas no banco de dados DynamoDB.
+
+## Ferramentas
+
+* [AWS](https://aws.amazon.com/pt/) plataforma de computação em nuvem da Amazon.
+  * [DynamoDB](https://aws.amazon.com/dynamodb/) banco de dados não relacional que oferece rápida e escalável performance.
+  * [S3](https://aws.amazon.com/s3/) serviço de armazenamento.
+  * [API Gateway](https://aws.amazon.com/api-gateway/) serviço para criação, implantação e gerenciamento de APIs.
+  * [Lambda](https://aws.amazon.com/lambda/) serviço de computação *serverless* que permite a execução de código sem a preocupação de gerenciar servidores.
+
+## Equipe
+
+- [Davi](https://github.com/davi222-santos)
+- [Dayanne](https://github.com/dayannebugarim)
+- [Josiana](https://github.com/JosianaSilva)
+- [Rafael](https://github.com/Kurokishin)
 
 ## Execução (Código Fonte)
 
