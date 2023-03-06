@@ -3,7 +3,8 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: python3.9
+  runtime: python3.8
+  region: us-east-1
 
 functions:
   health:
@@ -24,3 +25,9 @@ functions:
       - httpApi:
           path: /v2
           method: get
+  postVision:
+    handler: handler.post_vision
+    events:
+      - httpApi:
+          path: /v1/vision
+          method: post
