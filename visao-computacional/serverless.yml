@@ -5,6 +5,24 @@ provider:
   name: aws
   runtime: python3.9
 
+resources:
+  Resources:
+    MyBucket:
+      Type: 'AWS::S3::Bucket'
+      Properties:
+        BucketName: imagens-grupo1
+    MyBucketPolicy:
+      Type: 'AWS::S3::BucketPolicy'
+      Properties:
+        Bucket: !Ref MyBucket
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: '*'
+              Action: 's3:GetObject'
+              Resource: 'arn:aws:s3:::imagens-grupo1/*'
+
 functions:
   health:
     handler: handler.health
@@ -24,3 +42,21 @@ functions:
       - httpApi:
           path: /v2
           method: get
+  v1Vision:
+    handler: handler.v1_vision
+    events:
+      - httpApi:
+          path: /v1/vision
+          method: post
+  v2Vision:
+    handler: handler.v2_vision
+    events:
+      - httpApi:
+          path: /v2/vision
+          method: post
+  v3Vision:
+    handler: handler.v3_vision
+    events:
+      - httpApi:
+          path: /v3/vision
+          method: post        

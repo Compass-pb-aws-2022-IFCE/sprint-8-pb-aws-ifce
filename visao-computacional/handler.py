@@ -28,3 +28,30 @@ def v2_description(event, context):
     response = {"statusCode": 200, "body": json.dumps(body)}
 
     return response
+
+def v1_vision(event, context):
+    body = {
+        "message": "Rota v1 vision."
+    }
+
+    response = {"statusCode": 200, "body": json.dumps(body)}
+
+    return response
+
+def v2_vision(event, context):
+    body = {
+        "message": "Rota v2 vision."
+    }
+
+    response = {"statusCode": 200, "body": json.dumps(body)}
+
+    return response
+
+def v3_vision(event, context):
+    body = {
+        "message": "Rota v3 vision."
+    }
+
+    response = {"statusCode": 200, "body": json.dumps(body)}
+
+    return response
