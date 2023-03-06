@@ -6,7 +6,7 @@ Avaliação da oitava sprint do programa de bolsas Compass.uol para formação e
 
 ## Execução (Código Fonte)
 
-Com base nas atividades anteriores realizadas, crie um conjunto de lambdas que irá ser acionado quando uma imagem for postada no S3 e irá rodar o "rekognition" para extrair tags e também utilizaremos o dynamodb para gravar os resultados.
+Com base nas atividades anteriores realizadas, crie um conjunto de lambdas que irão dar suporte a APIs que irão rodar o "rekognition" para extrair tags de imagens postadas no S3, e também utilizaremos o dynamodb para gravar os logs dos resultados.
 
 **Especificações**:
 
@@ -133,7 +133,7 @@ Deverá ser criada a rota `/v1/vision` que receberá um post no formato abaixo:
 
 - Essa imagem deverá estar no S3 (faça o upload manualmente)
 - Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação. utilize: `print(body)`
+- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação através do dynamodb. utilize: `print(body)`
 
 Resposta a ser entregue (exatamente neste formato):
 
@@ -188,7 +188,7 @@ Deverá ser criada a rota `/v2/vision` que receberá um post no formato abaixo:
 - Essa imagem deverá estar no S3 (faça o upload manualmente)
 - Nesta versão deverão ser implementados novos campos de retorno que definirá se nesta imagem encontrou algum rosto e seu posicionamento.
 - Para isso utilize um dos modelos que identificam faces do rekognition.
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação. utilize: `print(body)`
+- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação através do dynamodb. utilize: `print(body)`
 - Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
 
 Resposta a ser entregue quando houver face (exatamente neste formato):
@@ -239,7 +239,7 @@ Exemplos e docs de referência:
 - Essa imagem deverá estar no S3 (faça o upload manualmente)
 - Nesta versão deverão ser implementados novos campos de retorno que definirá qual a EMOÇÂO PRINCIPAL classificada pelo modelo (maior confiança).
 - Para isso utilize um dos modelos que identificam faces do rekognition.
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação. utilize: `print(body)`
+- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação através do dynamodb. utilize: `print(body)`
 - Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
 
 Resposta a ser entregue (exatamente neste formato):
