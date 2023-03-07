@@ -81,9 +81,14 @@ def v1_vision(event, context):
 
 def v2_vision(event, context):
 
-    image_info = json.loads(event['body'])
-    bucket = image_info['bucket']
-    image_name = image_info['imageName']
+    # Recebe o objeto enviado pelo cliente
+    try:
+        image_info = json.loads(event['body'])
+        bucket = image_info['bucket']
+        image_name = image_info['imageName']
+    except:
+        # Em caso de erro, retorna uma resposta com o código HTTP 500
+        return {"statusCode": 500, "body": json.dumps({"error": "Invalid input"})}
 
     # Cria uma instância do cliente Amazon Rekognition
     rekognition = boto3.client('rekognition')
