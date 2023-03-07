@@ -1,4 +1,5 @@
 import json
+from utils import functions
 
 
 def health(event, context):
@@ -29,12 +30,23 @@ def v2_description(event, context):
 
     return response
 
-def v1_vision(event, context):
-    body = {
-        "message": "Rota v1 vision."
+def mainpage(event, context):
+
+    with open('templates/index.html', 'r') as f:
+        html_content = f.read()
+    
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'text/html',
+        },
+        'body': html_content,
     }
 
-    response = {"statusCode": 200, "body": json.dumps(body)}
+def v1_vision(event, context):
+    payload = functions.payload(event)
+    detectLabels = functions.detectObject(payload[0], payload[1])
+    response = functions.retorno_v1(detectLabels, payload[0], payload[1])
 
     return response
 
