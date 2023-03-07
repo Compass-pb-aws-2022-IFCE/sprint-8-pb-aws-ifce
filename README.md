@@ -188,7 +188,7 @@ Deverá ser criada a rota `/v2/vision` que receberá um post no formato abaixo:
 - Essa imagem deverá estar no S3 (faça o upload manualmente)
 - Nesta versão deverão ser implementados novos campos de retorno que definirá se nesta imagem encontrou algum rosto e seu posicionamento.
 - Para isso utilize um dos modelos que identificam faces do rekognition.
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação através do CloudWatch. utilize: `print(body)`
+- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação através do CloudWatch. utilize: `print(body)`.
 - Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
 
 Resposta a ser entregue quando houver face (exatamente neste formato):
@@ -237,10 +237,11 @@ Exemplos e docs de referência:
 ```
 
 - Essa imagem deverá estar no S3 (faça o upload manualmente)
-- Nesta versão deverão ser implementados novos campos de retorno que definirá qual a EMOÇÂO PRINCIPAL classificada pelo modelo (maior confiança).
+- Nesta versão deverão ser implementados novos campos de retorno que definirá qual a EMOÇÃO PRINCIPAL classificada pelo modelo (maior confiança).
 - Para isso utilize um dos modelos que identificam faces do rekognition.
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação através do CloudWatch. utilize: `print(body)`
-- Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
+- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação através do CloudWatch. utilize: `print(body)`.
+- Caso exista mais de uma face, fazer o retorno de cada uma.
+- Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno:
 
 Resposta a ser entregue (exatamente neste formato):
 
