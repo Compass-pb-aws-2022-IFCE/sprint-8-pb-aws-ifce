@@ -25,7 +25,7 @@ functions:
           path: /v2
           method: get
   v1Vision:
-    handler: routes/rota1.v1Vision
+    handler: handler.v1Vision
     events:
       - httpApi:
           path: /v1/vision
@@ -41,4 +41,11 @@ functions:
     events:
       - httpApi:
           path: /v3/vision
-          method: post          
+          method: post
+
+resources:
+  Resources:
+    MyS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: my-photos-sprint8      
