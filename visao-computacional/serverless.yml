@@ -48,10 +48,16 @@ functions:
       - httpApi:
           path: /v3/vision
           method: post
-          
+   
 resources:
   Resources:
     MyS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: my-photos-sprint8      
+        AccessControl: PublicRead
+        BucketName: my-photos-sprint8
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false    
