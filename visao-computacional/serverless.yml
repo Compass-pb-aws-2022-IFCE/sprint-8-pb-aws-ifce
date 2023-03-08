@@ -43,5 +43,3 @@ functions:
       - httpApi:
           path: /v3/vision
           method: post
-
-
