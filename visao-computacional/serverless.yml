@@ -4,6 +4,12 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: python3.9
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "rekognition:DetectLabels"
+        - "rekognition:DetectFaces"
+      Resource: "*"
 
 functions:
   health:
@@ -25,13 +31,13 @@ functions:
           path: /v2
           method: get
   v1Vision:
-    handler: handler.v1Vision
+    handler: routes/v1.v1Vision
     events:
       - httpApi:
           path: /v1/vision
           method: post
   v2Vision:
-    handler: routes/rota2.v2Vision
+    handler: handler.v2Vision
     events:
       - httpApi:
           path: /v2/vision
@@ -42,7 +48,7 @@ functions:
       - httpApi:
           path: /v3/vision
           method: post
-
+          
 resources:
   Resources:
     MyS3Bucket:
