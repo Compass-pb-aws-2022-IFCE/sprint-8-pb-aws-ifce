@@ -1,6 +1,32 @@
 service: vision
 frameworkVersion: '3'
 
+resources:
+  Resources:
+    MyS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        BucketName: photos-sprint8
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false
+    MyBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref MyS3Bucket
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: '*'
+              Action:
+                - s3:GetObject
+              Resource: arn:aws:s3:::photos-sprint8/*
+
 provider:
   name: aws
   runtime: python3.9
@@ -48,16 +74,3 @@ functions:
       - httpApi:
           path: /v3/vision
           method: post
-   
-resources:
-  Resources:
-    MyS3Bucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        AccessControl: PublicRead
-        BucketName: my-photos-sprint8
-        PublicAccessBlockConfiguration:
-          BlockPublicAcls: false
-          BlockPublicPolicy: false
-          IgnorePublicAcls: false
-          RestrictPublicBuckets: false    
