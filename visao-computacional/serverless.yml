@@ -1,5 +1,4 @@
 service: vision
-frameworkVersion: '3'
 
 provider:
   name: aws
@@ -9,8 +8,11 @@ provider:
       Action:
         - "rekognition:DetectLabels"
         - "rekognition:DetectFaces"
-      Resource: "*"
-    
+        - "s3:GetObject"
+      Resource:
+        - "*"
+        - "arn:aws:s3:::pollystoragesprint6/*"
+
 functions:
   health:
     handler: handler.health
@@ -31,19 +33,19 @@ functions:
           path: /v2
           method: get
   v1_vision:
-    handler: handler.v1_vision
+    handler: routes/v1.v1_vision
     events:
       - http:
           path: /v1/vision
           method: post
   v2_vision:
-    handler: handler.v2_vision
+    handler: routes/v2.v2_vision
     events:
       - http:
           path: /v2/vision
           method: post
   v3_vision:
-    handler: handler.v3_vision
+    handler: routes/v3.v3_vision
     events:
       - http:
           path: /v3/vision
