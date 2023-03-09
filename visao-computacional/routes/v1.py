@@ -3,12 +3,14 @@ import boto3
 import datetime
 
 from utils.v1 import functions
+from utils.getCreationDate import getCreationDate
 
 s3 = boto3.client('s3')
 rekognition = boto3.client('rekognition')
 cloudwatch = boto3.client('logs')
 
 def v1Vision(event, context):
+
     try:
         body = json.loads(event['body'])
         bucket = body['bucket']
@@ -18,6 +20,8 @@ def v1Vision(event, context):
         # Carregando imagem do s3
         s3_resource = boto3.resource('s3')
         s3_resource.Object(bucket, imageName).download_file('/tmp/' + imageName)
+
+        creation_date = getCreationDate(bucket, imageName).strftime('%d-%m-%Y %H:%M:%S')
 
         # Chamando labels do Rekognition
         with open('/tmp/' + imageName, 'rb') as f:
@@ -31,17 +35,16 @@ def v1Vision(event, context):
         labels = response['Labels']
         
         # Log do CloudWatch
-        timestamp = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
         log_data = {
             "url_to_image": imageUrl,
-            "created_image": timestamp,
+            "created_image": creation_date,
             "labels": labels
         }
         print(json.dumps(log_data))
         
         response_data = {
             "url_to_image": imageUrl,
-            "created_image": timestamp,
+            "created_image": creation_date,
             "labels": [
                 {"Name": label["Name"], "Confidence": label["Confidence"]} for label in labels
             ]
