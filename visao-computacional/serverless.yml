@@ -30,12 +30,14 @@ resources:
 provider:
   name: aws
   runtime: python3.9
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - "rekognition:DetectLabels"
-        - "rekognition:DetectFaces"
-      Resource: "*"
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "rekognition:DetectLabels"
+            - "rekognition:DetectFaces"
+          Resource: "*"
 
 functions:
   health:
