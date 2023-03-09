@@ -1,6 +1,5 @@
 import boto3
 import json
-from datetime import datetime
 
 def payload(event):
     payload = json.loads(event["body"])
@@ -22,10 +21,12 @@ def detectObject(bucket, filename):
     labels = [{'Confidence': label['Confidence'], 'Name': label['Name']} for label in response['Labels']]
     return labels
 
-
 def retorno_v1(labels, bucket, filename):
+    s3 = boto3.client("s3")
+    dados_imagem = s3.head_object(Bucket=bucket, Key=filename)
+    data_upload = dados_imagem['LastModified']
     return {
         "url_to_image": f"https://{bucket}.s3.amazonaws.com/{filename}",
-        "created_image": str(datetime.now()).split(".")[0],
+        "created_image": str(data_upload).split('+')[0],
         "labels": labels
     }
