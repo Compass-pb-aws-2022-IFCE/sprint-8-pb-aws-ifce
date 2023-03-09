@@ -60,18 +60,21 @@ functions:
           method: get
   v1Vision:
     handler: routes/v1.v1Vision
+    name: v1Vision
     events:
       - httpApi:
           path: /v1/vision
           method: post
   v2Vision:
-    handler: handler.v2Vision
+    handler: routes/v2.v2Vision
+    name: v2Vision
     events:
       - httpApi:
           path: /v2/vision
           method: post
   v3Vision:
-    handler: routes/rota3.v3Vision
+    handler: routes/v3.v3Vision
+    name: v3Vision
     events:
       - httpApi:
           path: /v3/vision
