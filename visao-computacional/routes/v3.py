@@ -38,23 +38,48 @@ def v3Vision(event, context):
         response_data = {
             'url_to_image': imageUrl,
             'created_image': timestamp,
+            'faces': []
         }
 
         # Armazena a emoção e a confiança no response_data
         face_details_list = response['FaceDetails']
         if len(face_details_list) == 0:
-            response_data['faces'] = [{'position': {'Height': None, 'Left': None, 'Top': None, 'Width': None}, 'classified_emotion': None, 'classified_emotion_confidence': None}]
+            response_data['faces'].append({
+                'position': {
+                    'Height': None,
+                    'Left': None,
+                    'Top': None,
+                    'Width': None
+                },
+                'classified_emotion': None,
+                'classified_emotion_confidence': None
+            })
         elif len(face_details_list) == 1:
             face_details = face_details_list[0]
             classified_emotion, classified_emotion_confidence = classifyEmotion(face_details)
-            response_data['faces'] = [{'position': face_details['BoundingBox'], 'classified_emotion': classified_emotion, 'classified_emotion_confidence': classified_emotion_confidence}]
+            position = face_details['BoundingBox']
+            response_data['faces'].append({
+                'position': {
+                    'Height': position['Height'],
+                    'Left': position['Left'],
+                    'Top': position['Top'],
+                    'Width': position['Width']
+                },
+                'classified_emotion': classified_emotion,
+                'classified_emotion_confidence': classified_emotion_confidence
+            })
         else:
             # Cria um array de objetos para cada face, caso exista mais de uma
-            response_data['faces'] = []
             for face_details in face_details_list:
                 classified_emotion, classified_emotion_confidence = classifyEmotion(face_details)
+                position = face_details['BoundingBox']
                 response_data['faces'].append({
-                    'position': face_details['BoundingBox'],
+                    'position': {
+                        'Height': position['Height'],
+                        'Left': position['Left'],
+                        'Top': position['Top'],
+                        'Width': position['Width']
+                    },
                     'classified_emotion': classified_emotion,
                     'classified_emotion_confidence': classified_emotion_confidence
                 })
