@@ -1,4 +1,4 @@
-def classify_emotion(face_details):
+def classifyEmotion(face_details):
     emotions = face_details['Emotions']
     emotion_confidence = {}
 
