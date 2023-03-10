@@ -296,6 +296,28 @@ No caso de duas faces:
 }
 ```
 
+Resposta a ser entregue quando não houver face (exatamente neste formato):
+
+```json
+{
+  "url_to_image": "https://myphotos/test.jpg",
+  "created_image": "02-02-2023 17:00:00",
+  "faces": [
+    {
+     "position":
+     {
+      "Height": Null,
+      "Left": Null,
+      "Top": Null,
+      "Width": Null
+     }
+     "classified_emotion": Null,
+     "classified_emotion_confidence": Null
+    }
+ ]
+}
+```
+
 Exemplos e docs de referência:
 
 - https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html (Trabalhando com Faces)
