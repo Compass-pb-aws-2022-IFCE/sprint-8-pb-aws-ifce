@@ -39,13 +39,18 @@ def v2Vision(event, context):
         print(json.dumps(log_data))
         
         if  response["FaceDetails"]:
-            haveFaces = "true"
+            haveFaces = True
             positions = [
-                details["BoundingBox"] for details in response["FaceDetails"]
+                {
+                    "Height": details["BoundingBox"]["Height"],
+                    "Left": details["BoundingBox"]["Left"],
+                    "Top": details["BoundingBox"]["Top"],
+                    "Width": details["BoundingBox"]["Width"]
+                } for details in response["FaceDetails"]
             ]
         else:
-            haveFaces = "false"
-            positions = "null"
+            haveFaces = False
+            positions = None
 
         response_data = {
             "url_to_image": imageUrl,
