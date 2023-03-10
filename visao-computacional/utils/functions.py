@@ -11,13 +11,13 @@ def validate_image_info(image_info):
 
     try:
         if 'bucket' not in image_info:
-            raise KeyError("'bucket' não encontrado")
+            raise KeyError("The 'bucket' key was not found.")
         if 'imageName' not in image_info:
-            raise KeyError("'imageName' não encontrado")
+            raise KeyError("The 'imageName' key was not found.")
         bucket = image_info['bucket']
         image_name = image_info['imageName']
     except KeyError as e:
-        error_message = str(e)
+        error_message = str(e).replace("\\", "").replace("\"", "")
         raise ValueError(error_message)
     return bucket, image_name
 
