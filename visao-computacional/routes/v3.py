@@ -1,9 +1,5 @@
 import json
-import boto3
-from datetime import datetime
-import os
-from botocore.exceptions import ClientError
-from utils.functions import validate_image_info, get_faces_response
+from utils.functions import validate_image_info, get_faces_response, get_image_creation_date
 
 def v3_vision(event, context):
 
@@ -34,7 +30,7 @@ def v3_vision(event, context):
     # Cria o objeto de resposta
     response_data = {
         "url_to_image": f"https://{bucket}/{image_name}",
-        "created_image": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+        "created_image": get_image_creation_date(bucket, image_name),
         "classified_emotions": emotions
     }
 

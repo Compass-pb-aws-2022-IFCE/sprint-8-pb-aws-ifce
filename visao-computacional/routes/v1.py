@@ -1,9 +1,6 @@
 import json
-import boto3
 from datetime import datetime
-import os
-from botocore.exceptions import ClientError
-from utils.functions import validate_image_info, get_labels_response
+from utils.functions import validate_image_info, get_labels_response, get_image_creation_date
 
 def v1_vision(event, context):
 
@@ -28,7 +25,7 @@ def v1_vision(event, context):
     # Cria a resposta com as informações solicitadas
     response_data = {
         'url_to_image': f"https://{bucket}/{image_name}",
-        'created_image': datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+        'created_image': get_image_creation_date(bucket, image_name),
         'labels': labels
     }
 
