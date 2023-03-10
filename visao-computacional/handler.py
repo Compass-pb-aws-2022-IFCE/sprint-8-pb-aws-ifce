@@ -31,4 +31,13 @@ def v2_description(event, context):
 
     return response
 
+def v3_description(event, context):
+    body = {
+        "message": "VISION api version 3."
+    }
+
+    response = {"statusCode": 200, "body": json.dumps(body)}
+
+    return response
+
 

@@ -58,6 +58,12 @@ functions:
       - httpApi:
           path: /v2
           method: get
+  v3Description:
+    handler: handler.v3_description
+    events:
+      - httpApi:
+          path: /v3
+          method: get
   v1Vision:
     handler: routes/v1.v1Vision
     name: v1Vision
