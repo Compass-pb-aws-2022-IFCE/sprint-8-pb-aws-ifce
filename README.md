@@ -247,10 +247,52 @@ Resposta a ser entregue (exatamente neste formato):
 
 ```json
 {
-  "url_to_image": "https://myphotos/test-happy.jpg",
+  "url_to_image": "https://myphotos/test.jpg",
   "created_image": "02-02-2023 17:00:00",
-  "classified_emotion": "HAPPY",
-  "classified_emotion_condidence": 99.92965151369571686,
+  "faces": [
+    {
+     "position":
+     {
+      "Height": 0.06333330273628235,
+      "Left": 0.1718519926071167,
+      "Top": 0.7366669774055481,
+      "Width": 0.11061699688434601
+     }
+     "classified_emotion": "HAPPY",
+     "classified_emotion_confidence": 99.92965151369571686
+    }
+ ]
+}
+```
+No caso de duas faces:
+```json
+{
+  "url_to_image": "https://myphotos/test.jpg",
+  "created_image": "02-02-2023 17:00:00",
+  "faces": [
+    {
+     "position":
+     {
+      "Height": 0.06333330273628235,
+      "Left": 0.1718519926071167,
+      "Top": 0.7366669774055481,
+      "Width": 0.11061699688434601
+     }
+     "classified_emotion": "HAPPY",
+     "classified_emotion_confidence": 99.92965151369571686
+    },
+     {
+     "position":
+     {
+      "Height": 0.08333330273628235,
+      "Left": 0.3718519926071167,
+      "Top": 0.6366669774055481,
+      "Width": 0.21061699688434601
+     }
+     "classified_emotion": "HAPPY",
+     "classified_emotion_confidence": 98.92965151369571686
+    }
+ ]
 }
 ```
 
