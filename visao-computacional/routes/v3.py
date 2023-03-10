@@ -1,8 +1,7 @@
 import json
 import boto3
 from utils.getCreationDate import getCreationDate
-
-from utils.v3.functions import classify_emotion
+from utils.classifyEmotion import classifyEmotion
 
 s3 = boto3.client('s3')
 rekognition = boto3.client('rekognition')
@@ -43,17 +42,19 @@ def v3Vision(event, context):
 
         # Armazena a emoção e a confiança no response_data
         face_details_list = response['FaceDetails']
-        if len(face_details_list) == 1:
+        if len(face_details_list) == 0:
+            response_data['faces'] = [{'position': {'Height': None, 'Left': None, 'Top': None, 'Width': None}, 'classified_emotion': None, 'classified_emotion_confidence': None}]
+        elif len(face_details_list) == 1:
             face_details = face_details_list[0]
-            classified_emotion, classified_emotion_confidence = classify_emotion(face_details)
-            response_data['classified_emotion'] = classified_emotion
-            response_data['classified_emotion_confidence'] = classified_emotion_confidence
+            classified_emotion, classified_emotion_confidence = classifyEmotion(face_details)
+            response_data['faces'] = [{'position': face_details['BoundingBox'], 'classified_emotion': classified_emotion, 'classified_emotion_confidence': classified_emotion_confidence}]
         else:
             # Cria um array de objetos para cada face, caso exista mais de uma
             response_data['faces'] = []
             for face_details in face_details_list:
-                classified_emotion, classified_emotion_confidence = classify_emotion(face_details)
+                classified_emotion, classified_emotion_confidence = classifyEmotion(face_details)
                 response_data['faces'].append({
+                    'position': face_details['BoundingBox'],
                     'classified_emotion': classified_emotion,
                     'classified_emotion_confidence': classified_emotion_confidence
                 })
@@ -71,7 +72,7 @@ def v3Vision(event, context):
     except Exception as e:
         response = {
             "statusCode": 500,
-            "body": json.dumps({"message": str(e)}),
+            "body": json.dumps({"error": str(e)}),
             "headers": {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*"

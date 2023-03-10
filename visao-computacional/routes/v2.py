@@ -2,8 +2,6 @@ import json
 import boto3
 from utils.getCreationDate import getCreationDate
 
-from utils.v2 import functions
-
 s3 = boto3.client('s3')
 rekognition = boto3.client('rekognition')
 cloudwatch = boto3.client('logs')

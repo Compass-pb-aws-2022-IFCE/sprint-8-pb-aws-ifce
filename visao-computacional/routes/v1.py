@@ -1,8 +1,6 @@
 import json
 import boto3
-import datetime
 
-from utils.v1 import functions
 from utils.getCreationDate import getCreationDate
 
 s3 = boto3.client('s3')
