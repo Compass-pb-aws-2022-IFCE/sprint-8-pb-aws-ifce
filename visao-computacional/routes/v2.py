@@ -34,7 +34,7 @@ def v2_vision(event, context):
 
     # Cria a resposta com as informações solicitadas
     response_data = {
-        'url_to_image': f"https://{bucket}/{image_name}",
+        'url_to_image': f"https://{bucket}.s3.amazonaws.com/{image_name}",
         'created_image': get_image_creation_date(bucket, image_name),
         'have_faces': have_faces,
         'position_faces': position_faces if have_faces else None,

@@ -48,7 +48,7 @@ def v3_vision(event, context):
 
     # Cria o objeto de resposta
     response_data = {
-        "url_to_image": f"https://{bucket}/{image_name}",
+        "url_to_image": f"https://{bucket}.s3.amazonaws.com/{image_name}",
         "created_image": get_image_creation_date(bucket, image_name),
         "faces": faces
     }
