@@ -1,4 +1,5 @@
 import json
+import io
 from utils import functions
 
 
@@ -32,15 +33,24 @@ def v2_description(event, context):
 
 def mainpage(event, context):
 
-    with open('templates/index.html', 'r') as f:
+    with io.open('templates/index.html', mode='r', encoding='utf-8') as f:
         html_content = f.read()
+    
+    with io.open('templates/static/styles.css', mode='r', encoding='utf-8') as f:
+        css_content = f.read()
+    
+    with io.open('templates/static/scripts.js', mode='r', encoding='utf-8') as f:
+        js_scripts = f.read()
+
+    html = '<html><head><style>' + css_content + '</style></head><body>' + html_content + '</body><script>' + js_scripts +' </script></html>'
+
     
     return {
         'statusCode': 200,
         'headers': {
             'Content-Type': 'text/html',
         },
-        'body': html_content,
+        'body': html,
     }
 
 def v1_vision(event, context):

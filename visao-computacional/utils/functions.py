@@ -9,7 +9,7 @@ def payload(event):
 
 def detectObject(bucket, filename):
     rekognition = boto3.client('rekognition')
-
+    filename = f'v1/{filename}'
     response = rekognition.detect_labels(
         Image={
             'S3Object': {
@@ -22,6 +22,7 @@ def detectObject(bucket, filename):
     return labels
 
 def retorno_v1(labels, bucket, filename):
+    filename = f'v1/{filename}'
     s3 = boto3.client("s3")
     dados_imagem = s3.head_object(Bucket=bucket, Key=filename)
     data_upload = dados_imagem['LastModified']
