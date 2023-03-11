@@ -4,6 +4,7 @@ from utils.getCreationDate import getCreationDate
 from utils.classifyEmotion import classifyEmotion
 from utils.loadVariables import loadVariables
 from utils.loadImageS3 import loadImageS3
+from utils.detectFaces import detectFaces
 
 rekognition = boto3.client('rekognition')
 cloudwatch = boto3.client('logs')
@@ -16,21 +17,14 @@ def v3Vision(event, context):
         # Carregando imagem do s3
         file_path = loadImageS3(bucket, imageName)
 
-        # Chamando a função detect_faces do Rekognition
-        with open('/tmp/' + imageName, 'rb') as f:
-            response = rekognition.detect_faces(
-                Image = {
-                    'Bytes': f.read()
-                },
-                Attributes=['ALL']
-            )
-
         timestamp = getCreationDate(bucket, imageName)
+
+        faces_response = detectFaces(file_path)
 
         log_data = {
             "url_to_image": imageUrl,
             "created_image": timestamp,
-            "response": response
+            "response": faces_response
         }
 
         response_data = {
@@ -40,8 +34,7 @@ def v3Vision(event, context):
         }
 
         # Armazena a emoção e a confiança no response_data
-        face_details_list = response['FaceDetails']
-        if len(face_details_list) == 0:
+        if len(faces_response) == 0:
             response_data['faces'].append({
                 'position': {
                     'Height': None,
@@ -52,8 +45,8 @@ def v3Vision(event, context):
                 'classified_emotion': None,
                 'classified_emotion_confidence': None
             })
-        elif len(face_details_list) == 1:
-            face_details = face_details_list[0]
+        elif len(faces_response) == 1:
+            face_details = faces_response[0]
             classified_emotion, classified_emotion_confidence = classifyEmotion(face_details)
             position = face_details['BoundingBox']
             response_data['faces'].append({
@@ -68,7 +61,7 @@ def v3Vision(event, context):
             })
         else:
             # Cria um array de objetos para cada face, caso exista mais de uma
-            for face_details in face_details_list:
+            for face_details in faces_response:
                 classified_emotion, classified_emotion_confidence = classifyEmotion(face_details)
                 position = face_details['BoundingBox']
                 response_data['faces'].append({

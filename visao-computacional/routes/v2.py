@@ -16,19 +16,11 @@ def v2Vision(event, context):
         # Carregando imagem do s3
         file_path = loadImageS3(bucket, imageName)
 
-        # Chamando faces do Rekognition
-        with open('/tmp/' + imageName, 'rb') as f:
-            response = rekognition.detect_faces(
-                Image = {
-                    'Bytes': f.read()
-                },
-                Attributes=['ALL']
-            )
         # Informando a data que a imagem foi enviada ao S3
         timestamp = getCreationDate(bucket, imageName)
         
         # Chamando faces do Rekognition
-        #response = detectFaces('/tmp/' + imageName)
+        response = detectFaces(file_path)
         
         log_data = {
             "url_to_image": imageUrl,
@@ -37,7 +29,7 @@ def v2Vision(event, context):
         }
         print(json.dumps(log_data))
         
-        if  response["FaceDetails"]:
+        if response:
             haveFaces = True
             positions = [
                 {
@@ -45,7 +37,7 @@ def v2Vision(event, context):
                     "Left": details["BoundingBox"]["Left"],
                     "Top": details["BoundingBox"]["Top"],
                     "Width": details["BoundingBox"]["Width"]
-                } for details in response["FaceDetails"]
+                } for details in response
             ]
         else:
             haveFaces = False
