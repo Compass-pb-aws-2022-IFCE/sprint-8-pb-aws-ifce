@@ -33,8 +33,11 @@ def v2_description(event, context):
 
 def mainpage(event, context):
 
-    with io.open('templates/index.html', mode='r', encoding='utf-8') as f:
-        html_content = f.read()
+    with io.open('templates/index-head.html', mode='r', encoding='utf-8') as f:
+        html_head = f.read()
+        
+    with io.open('templates/index-body.html', mode='r', encoding='utf-8') as f:
+        html_body = f.read()
     
     with io.open('templates/static/styles.css', mode='r', encoding='utf-8') as f:
         css_content = f.read()
@@ -42,9 +45,8 @@ def mainpage(event, context):
     with io.open('templates/static/scripts.js', mode='r', encoding='utf-8') as f:
         js_scripts = f.read()
 
-    html = '<html><head><style>' + css_content + '</style></head><body>' + html_content + '</body><script>' + js_scripts +' </script></html>'
+    html = html_head + '<style>' + css_content + '</style></head><body>' + html_body + '</body><script>' + js_scripts +' </script></html>'
 
-    
     return {
         'statusCode': 200,
         'headers': {

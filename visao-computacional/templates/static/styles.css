@@ -18,3 +18,7 @@ h1{
     border: 1px solid rgb(255, 73, 41);
     color: rgb(255, 73, 41)
 }
+
+#container{
+    margin: 20px;
+}
