@@ -7,7 +7,7 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         AccessControl: PublicRead
-        BucketName: photos-sprint8-davi
+        BucketName: photos-sprint8
         PublicAccessBlockConfiguration:
           BlockPublicAcls: false
           BlockPublicPolicy: false
@@ -25,7 +25,7 @@ resources:
               Principal: '*'
               Action:
                 - s3:GetObject
-              Resource: arn:aws:s3:::photos-sprint8-davi/*
+              Resource: arn:aws:s3:::photos-sprint8/*
 
 provider:
   name: aws
@@ -85,3 +85,10 @@ functions:
       - httpApi:
           path: /v3/vision
           method: post
+  homepage:
+    handler: routes/homepage.home_vision
+    name: homepage
+    events:
+      - httpApi:
+          path: /home
+          method: get
