@@ -11,9 +11,9 @@
 
 - [📂 Organização do código](#-descrição-do-projeto)
 
-- [⚙️ Estrutura das rotas](#-estrutura-das-rotas)
+- [⬇️ Arquivo Functions.py](#-arquivo-functions.py)
 
-- [⬇️ Desenvolvimento da API (Functions.py)](#-desenvolvimento-da-api)
+- [⚙️ Estrutura das rotas](#-estrutura-das-rotas)
 
 - [📤 Deploy](#deploy)
 
@@ -57,9 +57,9 @@ A organização do código ajudou a evitar erros e bugs, uma vez que as partes d
 
 Em resumo, a organização do código foi fundamental para o sucesso do projeto, pois tornou o processo de desenvolvimento mais eficiente e efetivo.
 
-## ⚙️ Estrutura das rotas
+## ⬇️ Arquivo Functions.py
 
-## ⬇️ Desenvolvimento da API (Functions.py)
+## ⚙️ Estrutura das rotas
 
 ## 📤 Deploy
 
