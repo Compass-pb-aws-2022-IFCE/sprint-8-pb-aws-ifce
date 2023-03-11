@@ -1,4 +1,4 @@
-document.getElementById("submitBtn").addEventListener("click", function(event) {
+document.getElementById("submitBtn").addEventListener("click", function (event) {
     event.preventDefault();
 
     // Extrai o texto e a rota escolhida pelo usuário e cria uma função de HTTP Request.
@@ -11,11 +11,11 @@ document.getElementById("submitBtn").addEventListener("click", function(event) {
     xhr.setRequestHeader("Content-Type", "application/json");
 
     // Envia a resposta como JSON/string na tela
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        document.getElementById("output").innerText = JSON.stringify(response, null, 2);
+            const response = JSON.parse(xhr.responseText);
+            document.getElementById("output").innerText = JSON.stringify(response, null, 2);
         }
     };
-    xhr.send(JSON.stringify({ bucket: "imagens-grupo1", imageName: textInput}));
+    xhr.send(JSON.stringify({ bucket: "imagens-grupo1", imageName: textInput }));
 });

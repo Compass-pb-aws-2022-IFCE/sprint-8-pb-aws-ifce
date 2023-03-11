@@ -1,5 +1,6 @@
-import json
 import io
+import json
+
 from utils import functions
 
 
@@ -44,6 +45,7 @@ def mainpage(event, context):
     
     with io.open('templates/static/scripts.js', mode='r', encoding='utf-8') as f:
         js_scripts = f.read()
+    
 
     html = html_head + '<style>' + css_content + '</style></head><body>' + html_body + '</body><script>' + js_scripts +' </script></html>'
 
@@ -63,11 +65,10 @@ def v1_vision(event, context):
     return response
 
 def v2_vision(event, context):
-    body = {
-        "message": "Rota v2 vision."
-    }
-
-    response = {"statusCode": 200, "body": json.dumps(body)}
+    payload = functions.payload(event)
+    detectFaces = functions.detectFaces(payload[0], payload[1])
+    response = functions.retorno_v2(detectFaces,payload[0], payload[1])
+    #response = {"statusCode": 200, "body": json.dumps(body)}
 
     return response
 
