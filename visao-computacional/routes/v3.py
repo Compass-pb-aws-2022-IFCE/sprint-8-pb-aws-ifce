@@ -2,21 +2,19 @@ import json
 import boto3
 from utils.getCreationDate import getCreationDate
 from utils.classifyEmotion import classifyEmotion
+from utils.loadVariables import loadVariables
+from utils.loadImageS3 import loadImageS3
 
-s3 = boto3.client('s3')
 rekognition = boto3.client('rekognition')
 cloudwatch = boto3.client('logs')
 
 def v3Vision(event, context):
     try:
-        body = json.loads(event['body'])
-        bucket = body['bucket']
-        imageName = body['imageName']
-        imageUrl = f"https://{bucket}.s3.amazonaws.com/{imageName}"
+        # Carregando as variáveis
+        bucket, imageName, imageUrl = loadVariables(event)
 
         # Carregando imagem do s3
-        s3_resource = boto3.resource('s3')
-        s3_resource.Object(bucket, imageName).download_file('/tmp/' + imageName)
+        file_path = loadImageS3(bucket, imageName)
 
         # Chamando a função detect_faces do Rekognition
         with open('/tmp/' + imageName, 'rb') as f:
@@ -27,7 +25,7 @@ def v3Vision(event, context):
                 Attributes=['ALL']
             )
 
-        timestamp = getCreationDate(bucket, imageName).strftime('%d-%m-%Y %H:%M:%S')
+        timestamp = getCreationDate(bucket, imageName)
 
         log_data = {
             "url_to_image": imageUrl,

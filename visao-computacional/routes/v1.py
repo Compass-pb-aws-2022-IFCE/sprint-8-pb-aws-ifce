@@ -1,48 +1,37 @@
 import json
 import boto3
-
 from utils.getCreationDate import getCreationDate
+from utils.loadVariables import loadVariables
+from utils.loadImageS3 import loadImageS3
+from utils.detectLabels import detectLabels
 
-s3 = boto3.client('s3')
-rekognition = boto3.client('rekognition')
 cloudwatch = boto3.client('logs')
 
 def v1Vision(event, context):
-
     try:
-        body = json.loads(event['body'])
-        bucket = body['bucket']
-        imageName = body['imageName']
-        imageUrl = f"https://{bucket}.s3.amazonaws.com/{imageName}"
+        # Carregando as variáveis
+        bucket, imageName, imageUrl = loadVariables(event)
         
         # Carregando imagem do s3
-        s3_resource = boto3.resource('s3')
-        s3_resource.Object(bucket, imageName).download_file('/tmp/' + imageName)
+        file_path = loadImageS3(bucket, imageName)
 
-        creation_date = getCreationDate(bucket, imageName).strftime('%d-%m-%Y %H:%M:%S')
+        # Informando a data que a imagem foi enviada ao S3
+        timestamp = getCreationDate(bucket, imageName)
 
         # Chamando labels do Rekognition
-        with open('/tmp/' + imageName, 'rb') as f:
-            response = rekognition.detect_labels(
-                Image={
-                    'Bytes': f.read()
-                },
-                MaxLabels=10,
-                MinConfidence=75
-            )
-        labels = response['Labels']
+        labels = detectLabels('/tmp/' + imageName)
         
         # Log do CloudWatch
         log_data = {
             "url_to_image": imageUrl,
-            "created_image": creation_date,
+            "created_image": timestamp,
             "labels": labels
         }
         print(json.dumps(log_data))
         
         response_data = {
             "url_to_image": imageUrl,
-            "created_image": creation_date,
+            "created_image": timestamp,
             "labels": [
                 {"Name": label["Name"], "Confidence": label["Confidence"]} for label in labels
             ]

@@ -1,23 +1,22 @@
 import json
 import boto3
 from utils.getCreationDate import getCreationDate
+from utils.loadVariables import loadVariables
+from utils.loadImageS3 import loadImageS3
+from utils.detectFaces import detectFaces
 
-s3 = boto3.client('s3')
-rekognition = boto3.client('rekognition')
 cloudwatch = boto3.client('logs')
+rekognition = boto3.client('rekognition')
 
 def v2Vision(event, context):
     try:
-        body = json.loads(event['body'])
-        bucket = body['bucket']
-        imageName = body['imageName']
-        imageUrl = f"https://{bucket}.s3.amazonaws.com/{imageName}"
+        # Carregando as variáveis
+        bucket, imageName, imageUrl = loadVariables(event)
         
         # Carregando imagem do s3
-        s3_resource = boto3.resource('s3')
-        s3_resource.Object(bucket, imageName).download_file('/tmp/' + imageName)
+        file_path = loadImageS3(bucket, imageName)
 
-        # Chamando a função detect_faces do Rekognition
+        # Chamando faces do Rekognition
         with open('/tmp/' + imageName, 'rb') as f:
             response = rekognition.detect_faces(
                 Image = {
@@ -25,9 +24,11 @@ def v2Vision(event, context):
                 },
                 Attributes=['ALL']
             )
-
-        # Log do CloudWatch
-        timestamp = getCreationDate(bucket, imageName).strftime('%d-%m-%Y %H:%M:%S')
+        # Informando a data que a imagem foi enviada ao S3
+        timestamp = getCreationDate(bucket, imageName)
+        
+        # Chamando faces do Rekognition
+        #response = detectFaces('/tmp/' + imageName)
         
         log_data = {
             "url_to_image": imageUrl,
