@@ -58,25 +58,42 @@ def mainpage(event, context):
     }
 
 def v1_vision(event, context):
-    payload = functions.payload(event)
-    detectLabels = functions.detectObject(payload[0], payload[1])
-    response = functions.retorno_v1(detectLabels, payload[0], payload[1])
+    body = {
+        "message": "error"
+    }
+    try:
+        payload = functions.payload(event)
+        detectLabels = functions.detectObject(payload[0], payload[1])
+        response = functions.retorno_v1(detectLabels, payload[0], payload[1])
+        print(response)
+        return {"statusCode": 200, "body": json.dumps(response)}
+    except Exception as e:
+        return {"statusCode": 500, "body": json.dumps(body)}
 
     return response
 
 def v2_vision(event, context):
-    payload = functions.payload(event)
-    detectFaces = functions.detectFaces(payload[0], payload[1])
-    response = functions.retorno_v2(detectFaces,payload[0], payload[1])
-    #response = {"statusCode": 200, "body": json.dumps(body)}
-
-    return response
+    body = {
+        "message": "error"
+    }
+    try:
+        payload = functions.payload(event)
+        detectFaces = functions.detectFaces(payload[0], payload[1])
+        response = functions.retorno_v2(detectFaces,payload[0], payload[1])
+        print(response)
+        return {"statusCode": 200, "body": json.dumps(response)}
+    except Exception as e:
+        return {"statusCode": 500, "body": json.dumps(body)}
 
 def v3_vision(event, context):
     body = {
-        "message": "Rota v3 vision."
+        "message": "error"
     }
-
-    response = {"statusCode": 200, "body": json.dumps(body)}
-
-    return response
+    try:
+        payload = functions.payload(event)
+        detectEmotions=functions.detectFacesEmotions(payload[0], payload[1])
+        response = functions.retorno_v3(detectEmotions,payload[0], payload[1])
+        print(response)
+        return {"statusCode": 200, "body": json.dumps(response)}
+    except Exception as e:
+        return {"statusCode": 500, "body": json.dumps(body)}

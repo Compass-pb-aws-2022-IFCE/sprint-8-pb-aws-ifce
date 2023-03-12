@@ -12,10 +12,21 @@ document.getElementById("submitBtn").addEventListener("click", function (event) 
 
     // Envia a resposta como JSON/string na tela
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
             const response = JSON.parse(xhr.responseText);
-            document.getElementById("output").innerText = JSON.stringify(response, null, 2);
+            if (xhr.status === 200) {
+                if (xhr.responseText) {
+
+                    document.getElementById("output").innerText = JSON.stringify(response, null, 2);
+                } else {
+                    console.error("Empty response");
+                }
+            } else {
+                document.getElementById("output").innerText = JSON.stringify(response, null, 2);
+                console.error(`HTTP error ${xhr.status}: ${xhr.statusText}`);
+            }
         }
     };
+
     xhr.send(JSON.stringify({ bucket: "imagens-grupo1", imageName: textInput }));
 });

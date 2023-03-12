@@ -1,4 +1,4 @@
-service: vision-comp
+service: vision
 frameworkVersion: '3'
 
 provider:
