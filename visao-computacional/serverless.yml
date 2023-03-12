@@ -38,12 +38,12 @@ functions:
       - httpApi:
           path: /menu
           method: get
-  v1Vision:
-    handler: handler.v1_vision
+   v1Vision:
+    v1Vision: rotas/detect_labels.v1Vision
     events:
       - httpApi:
-          path: /v1/vision
-          method: post
+         path: /v1Vision
+         method: post
   v2Vision:
     handler: handler.v2_vision
     events:
