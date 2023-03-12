@@ -32,12 +32,6 @@ functions:
       - httpApi:
           path: /v2
           method: get
-  mainPage:
-    handler: handler.mainpage
-    events:
-      - httpApi:
-          path: /menu
-          method: get
   v1Vision:
     handler: handler.v1_vision
     events:
