@@ -7,18 +7,22 @@ s3 = boto3.resource('s3')
 rekognition = boto3.client('rekognition')
 
 def detect_labels(bucket, key, max_labels=10, min_confidence=90):
-	response = rekognition.detect_labels(
-		Image={
-			"S3Object": {
-				"Bucket": bucket,
-				"Name": key,
-			}
-		},
-		MaxLabels=max_labels,
-		MinConfidence=min_confidence,
-	)
+	try:
+		response = rekognition.detect_labels(
+			Image={
+				"S3Object": {
+					"Bucket": bucket,
+					"Name": key,
+				}
+			},
+			MaxLabels=max_labels,
+			MinConfidence=min_confidence,
+		)
+		return response['Labels', 'statusCode': 200]
+	except:
+		return {"status": 500,
+						"body": "Error"}
 
-	return response['Labels']
 
 def exporta_dados(dados_json):
     arquivo =s3.Object('','dados.json')
