@@ -2,6 +2,7 @@ def v1Vision(event, context):
 	#Identificação de Labels
 	import boto3
 	import urllib
+	from datetime import datetime
 	import json
 
 	s3 = boto3.resource('s3')
@@ -19,18 +20,18 @@ def v1Vision(event, context):
 				MaxLabels=max_labels,
 				MinConfidence=min_confidence,
 			)
-			return response['Labels', 'statusCode': 200]
+			return response['creationDate': datetime.now(),"url_to_image": f"https://{bucket}/{key}",  'Labels', 'statusCode': 200]
 		except:
 			return {"status": 500,
 							"body": "Error"}
 
 
-	def exporta_dados(dados_json):
-		arquivo =s3.Object('','dados.json')
-		arquivo.put(Body=json.dumps(dados_json))
+	#def exporta_dados(dados_json):
+	#	arquivo =s3.Object('','dados.json')
+	#	arquivo.put(Body=json.dumps(dados_json))
 
-	def main(event, context):
-		bucket = 'imagens-rekognition'
-		key = urllib.parse.quote_plus(event['Records'][0]['s3']['object']['key'])
-		detect_labels(bucket, key)
+	#def main(event, context):
+	#	bucket = 'imagens-rekognition'
+	#	key = urllib.parse.quote_plus(event['Records'][0]['s3']['object']['key'])
+	#	detect_labels(bucket, key)
 

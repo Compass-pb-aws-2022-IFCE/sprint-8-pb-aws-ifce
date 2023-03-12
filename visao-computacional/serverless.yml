@@ -32,12 +32,23 @@ functions:
       - httpApi:
           path: /v2
           method: get
-  v1Vision:
-    handler: handler.v1_vision
+<<<<<<< HEAD
+  mainPage:
+    handler: handler.mainpage
     events:
       - httpApi:
-          path: /v1/vision
-          method: post
+          path: /menu
+          method: get
+   v1Vision:
+    v1Vision: rotas/detect_labels.v1Vision
+=======
+  v1Vision:
+    handler: handler.v1_vision
+>>>>>>> 6282e8109d2c2964905b07e5cbb701822c965360
+    events:
+      - httpApi:
+         path: /v1Vision
+         method: post
   v2Vision:
     handler: handler.v2_vision
     events:
