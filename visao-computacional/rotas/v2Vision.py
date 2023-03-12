@@ -36,8 +36,11 @@ def v2Vision(event, context):
 
         creation_date = creation_date.strftime('%d-%m-%Y %H:%M:%S')
 
-        positions = [face["BoundingBox"]
-                     for face in faceData["FaceDetails"]]
+        positions = [{'Height': face ['BoundingBox']['Height'],
+                       'Left': face ['BoundingBox']['Left'],
+                       'Top': face ['BoundingBox']['Top'],
+                       'Width': face ['BoundingBox']['Width']}
+                      for face in faceData ['FaceDetails']]
 		
 
         if faceData["FaceDetails"]:
@@ -45,7 +48,7 @@ def v2Vision(event, context):
         else:
             have_faces = False
             positions = None
-
+					
         body = {
             "url_to_image": f"https://{bucket}.s3.amazonaws.com/{photo}",
             "created_image": creation_date,
