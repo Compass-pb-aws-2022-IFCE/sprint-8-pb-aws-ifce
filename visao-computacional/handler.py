@@ -1,4 +1,10 @@
+import io
 import json
+
+from rotas import v1Vision
+from rotas import v2Vision
+from rotas import v3Vision
+from rotas import v3Vision
 
 
 def health(event, context):
@@ -28,3 +34,47 @@ def v2_description(event, context):
     response = {"statusCode": 200, "body": json.dumps(body)}
 
     return response
+
+def mainpage(event, context):
+
+    with io.open('templates/index-head.html', mode='r', encoding='utf-8') as f:
+        html_head = f.read()
+        
+    with io.open('templates/index-body.html', mode='r', encoding='utf-8') as f:
+        html_body = f.read()
+    
+    with io.open('templates/static/styles.css', mode='r', encoding='utf-8') as f:
+        css_content = f.read()
+    
+    with io.open('templates/static/scripts.js', mode='r', encoding='utf-8') as f:
+        js_scripts = f.read()
+    
+
+    html = html_head + '<style>' + css_content + '</style></head><body>' + html_body + '</body><script>' + js_scripts +' </script></html>'
+
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'text/html',
+        },
+        'body': html,
+    }
+
+def v1_vision(event, context):
+    payload = functions.payload(event)
+    detectLabels = functions.detectObject(payload[0], payload[1])
+    response = functions.retorno_v1(detectLabels, payload[0], payload[1])
+
+    return response
+
+def v2_vision(event, context):
+    payload = functions.payload(event)
+    detectFaces = functions.detectFaces(payload[0], payload[1])
+    response = functions.retorno_v2(detectFaces,payload[0], payload[1])
+    #response = {"statusCode": 200, "body": json.dumps(body)}
+
+    return response
+
+def v3_vision(event, context):
+    result = v3Vision.v3Vision(event, context)
+    return result

@@ -1,9 +1,17 @@
-service: vision
+service: vision-comp
 frameworkVersion: '3'
 
 provider:
   name: aws
   runtime: python3.9
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "rekognition:DetectLabels"
+        - "rekognition:DetectFaces"
+        - "s3:GetObject"
+      Resource:
+        - "*"
 
 functions:
   health:
@@ -24,3 +32,27 @@ functions:
       - httpApi:
           path: /v2
           method: get
+  mainPage:
+    handler: handler.mainpage
+    events:
+      - httpApi:
+          path: /menu
+          method: get
+  v1Vision:
+    handler: handler.v1_vision
+    events:
+      - httpApi:
+          path: /v1/vision
+          method: post
+  v2Vision:
+    handler: handler.v2_vision
+    events:
+      - httpApi:
+          path: /v2/vision
+          method: post
+  v3Vision:
+    handler: handler.v3_vision
+    events:
+      - httpApi:
+          path: /v3/vision
+          method: post        
