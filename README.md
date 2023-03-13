@@ -11,11 +11,11 @@
 
 - [📂 Organização do código](#-organização-do-código)
 
-- [⬇️ Arquivo Functions.py](#-arquivo-functions.py)
+- [⬇️ Arquivo functions.py](#-arquivo-functionspy)
 
 - [⚙️ Estrutura das rotas](#-estrutura-das-rotas)
 
-- [📤 Deploy](#deploy)
+- [📤 Deploy](#-deploy)
 
 - [📌 Considerações finais](#-considerações-finais)
 
@@ -34,12 +34,13 @@ Sendo:
 | ROTA 5 | POST        | Implementar o post de uma imagem hospedada no S3, é necessário adicionar novos campos de retorno que informem se a imagem contém algum rosto e sua posição. Para isso, é preciso utilizar um modelo de identificação de faces do serviço Rekognition. O post deve chamar o Rekognition para realizar a análise e o resultado da chamada (body) deve ser registrado na aplicação por meio do CloudWatch |
 | ROTA 6 | POST        | Fazer o upload manual de uma imagem no S3 e implementar novos campos de retorno que indiquem a emoção principal detectada pelo modelo de identificação de faces do Rekognition. O resultado da chamada deve ser registrado na aplicação por meio do CloudWatch, exibindo todas as emoções detectadas caso haja mais de uma face na imagem. O post deve chamar o serviço Rekognition para obter essa informação. |
 
-## 💻 Ferramentas e tecnologias
+## 💻 Ferramentas, linguagens e tecnologias
 
-- Visual Studio Code;
-- Amazon Web Services(AWS Lambda, S3, Rekognition, Serverless);
-- Python;
-- Postman.
+- Amazon Web Services([Lambda](https://aws.amazon.com/pt/lambda/), [S3](https://aws.amazon.com/pt/s3/), [Rekognition](https://aws.amazon.com/pt/rekognition/), [Serverless](https://aws.amazon.com/pt/serverless/), [Cloudwatch](https://aws.amazon.com/pt/cloudwatch/));
+- [Visual Studio Code](https://code.visualstudio.com/);
+- [Python](https://www.python.org/);
+- [Postman](https://www.postman.com/).
+
 
 ## 😌 Impedimentos resolvidos
 
@@ -57,7 +58,7 @@ A organização do código ajudou a evitar erros e bugs, uma vez que as partes d
 
 Em resumo, a organização do código foi fundamental para o sucesso do projeto, pois tornou o processo de desenvolvimento mais eficiente e efetivo.
 
-## ⬇️ Arquivo Functions.py
+## ⬇️ Arquivo functions.py
 
 Código em Python que define quatro funções para trabalhar com imagens na AWS: 
 
@@ -105,6 +106,16 @@ Por fim, a função retorna a resposta com sucesso, com um código de status 200
 
 ## 📤 Deploy
 
+O deploy é feito utilizando o comando:
+```bash
+serverless deploy
+```
+
+Em seguida será listado os links para cada endpoint e cada function, representado na imagem abaixo:
+
+![Deploy](https://i.imgur.com/IaW1rqf.jpeg)
+
+
 ## 📌 Considerações finais
 
 Em resumo, o projeto envolvendo o uso da plataforma AWS com Amazon Rekognition, S3 e CloudWatch foi muito proveitoso.
@@ -115,7 +126,7 @@ Ao usar o Amazon CloudWatch em conjunto com o Amazon Rekognition, é possível v
 
 Portanto, os serviços da AWS, como o Rekognition, fornecem recursos poderosos de processamento de imagem e reconhecimento de padrões para diversas aplicações. Ao integrar o Amazon CloudWatch, é possível monitorar e analisar o desempenho das aplicações. Essa integração é importante para garantir a qualidade do serviço oferecido, bem como para auxiliar no gerenciamento de custos e na tomada de decisões estratégicas.
 
-## 👤 Equipe
+## 👥 Equipe
 
 - [Edivalço Araújo](https://github.com/EdivalcoAraujo)
 - [Humberto Sampaio](https://github.com/Humbert010)
