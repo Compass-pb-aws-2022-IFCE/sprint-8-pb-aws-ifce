@@ -193,4 +193,4 @@ O código acima define três blocos de permissões com o seguinte significado:
 
 ## 👥 Equipe
 - [Jefferson Moreira](https://github.com/Jeef-Moreira)
-- [Nicolas Ferreira](https://github.com/TeclaFernandes)
+- [Tecla Fernandes](https://github.com/TeclaFernandes)
