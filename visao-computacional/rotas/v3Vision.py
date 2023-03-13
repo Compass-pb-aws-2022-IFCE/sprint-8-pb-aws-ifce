@@ -1,47 +1,61 @@
+import json
+from utils.modulos import validate_image_info, get_faces_response, get_image_creation_date
 def v3Vision(event, context):
-    import json
-    import boto3
-    import datetime
-    import logging
-    import base64
-    from urllib.parse import urlparse
-
-    s3 = boto3.client('s3')
-    rekognition = boto3.client('rekognition')
-    cloudwatch = boto3.client('logs')
-    #config = load_config()
-    #logger = configure_logger(config['aws']['cloudwatch_log_group'])
-    
+    # Recebe o objeto enviado pelo cliente e valida as informações
     try:
-        # Extrai o bucket e o nome da imagem a partir do corpo da requisição
-        body = json.loads(event['body'])
-        bucket = body['bucket']
-        imageName = body['imageName']
-        
-        # Carrega a imagem do S3
-        image = s3.get_object(Bucket=bucket, Key=imageName)['Body'].read()    # Parêntese extra removido
-        
-        # Chama o Rekognition para detectar faces na imagem
-        response = rekognition.detect_faces(
-            Image={'Bytes': image},
-            Attributes=['ALL']
-        )
-        
-        # Cria a estrutura de resposta
-        result = {
-            "url_to_image": f"https://{bucket}/{imageName}",
-            "created_image": datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
-            "faces": []
-        }
-        
-        return {
-            "statusCode": 200,
-            "body": json.dumps(result)
-        }
-    except Exception as e:
-        #logger.error(str(e))
-        return {
-            "statusCode": 500,
-            "body": json.dumps({"message": "Internal Server Error"})
-        }
+        image_info = json.loads(event['body'])
+        bucket, image_name = validate_image_info(image_info)
+    except ValueError as e:
+        error_message = str(e)
+        return {"statusCode": 500, "body": json.dumps({"error": error_message})}
+    
+    # Detecta as faces da imagem
+    try:
+        response_faces = get_faces_response(bucket, image_name)
+    except ValueError as e:
+        error_message = str(e)
+        return {"statusCode": 500, "body": json.dumps({"error": error_message})}
+    
+    # Cria a lista de rostos detectados com as emoções classificadas
+    faces = []
+    if not response_faces['FaceDetails']:
+        # Adiciona um objeto de rosto vazio com valores nulos
+        faces.append({
+            "position": {
+                "Height": None,
+                "Left": None,
+                "Top": None,
+                "Width": None
+            },
+            "classified_emotion": None,
+            "classified_emotion_confidence": None
+        })
+    else:
+        for face in response_faces['FaceDetails']:
+            highest_emotion = max(face['Emotions'], key=lambda e: e['Confidence'])
+            faces.append({
+                "position": {
+                    "Height": face['BoundingBox']['Height'],
+                    "Left": face['BoundingBox']['Left'],
+                    "Top": face['BoundingBox']['Top'],
+                    "Width": face['BoundingBox']['Width']
+                },
+                "classified_emotion": highest_emotion['Type'],
+                "classified_emotion_confidence": highest_emotion['Confidence']
+            })
 
+    # Cria o objeto de resposta
+    response_data = {
+        "url_to_image": f"https://{bucket}.s3.amazonaws.com/{image_name}",
+        "created_image": get_image_creation_date(bucket, image_name),
+        "faces": faces
+    }
+
+    # Mostra a resposta no CloudWatch:
+    print("RETURN:", json.dumps(response_data))
+
+    # Retorna resposta com sucesso
+    return {
+        "statusCode": 200,
+        "body": json.dumps(response_data)
+    }
