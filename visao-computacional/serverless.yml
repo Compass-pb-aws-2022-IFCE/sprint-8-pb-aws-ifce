@@ -37,7 +37,7 @@ functions:
     handler: handler.v1_vision
     events:
       - httpApi:
-         path: /v1Vision
+         path: /v1/vision
          method: post
   v2Vision:
     handler: handler.v2_vision

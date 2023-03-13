@@ -1,4 +1,4 @@
-# Detecção de faces
+#V2 no jeito Detecção de faces
 import boto3
 import json
 
@@ -48,7 +48,7 @@ def v2Vision(event, context):
         else:
             have_faces = False
             positions = None
-					
+
         body = {
             "url_to_image": f"https://{bucket}.s3.amazonaws.com/{photo}",
             "created_image": creation_date,

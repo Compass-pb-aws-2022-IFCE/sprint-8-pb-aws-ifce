@@ -1,17 +1,15 @@
 import json
-from utils.modulos import validate_image_info, get_faces_response, get_image_creation_date
+from utils.modulos import valida_image, detect_faces, get_image_creation_date
 def v3Vision(event, context):
-    # Recebe o objeto enviado pelo cliente e valida as informações
     try:
         image_info = json.loads(event['body'])
-        bucket, image_name = validate_image_info(image_info)
+        bucket, image_name = valida_image(image_info)
     except ValueError as e:
         error_message = str(e)
         return {"statusCode": 500, "body": json.dumps({"error": error_message})}
     
-    # Detecta as faces da imagem
     try:
-        response_faces = get_faces_response(bucket, image_name)
+        response_faces = detect_faces(bucket, image_name)
     except ValueError as e:
         error_message = str(e)
         return {"statusCode": 500, "body": json.dumps({"error": error_message})}
