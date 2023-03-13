@@ -118,7 +118,7 @@ Em seguida será listado os links para cada endpoint e cada function, representa
 ![rotas](https://user-images.githubusercontent.com/103221427/224724911-caaa425e-84f2-4085-995c-0d9f1b23b9fc.png)
 
 
-Para obter acesso as rotas criadas, contate a [equipe](#👥-equipe)
+Para obter acesso as rotas criadas, contate a [equipe](#-equipe)
 
 
  
