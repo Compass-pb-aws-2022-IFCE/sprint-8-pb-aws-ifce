@@ -15,7 +15,7 @@ Avaliação da oitava sprint do programa de bolsas Compass UOL para formação e
 
 ## Objetivo
 
-Utilizar do AWS Rekognition para analisar as características de uma imagem salva no S3 e armazenar as mesmas no banco de dados DynamoDB.
+Este projeto tem como objetivo demonstrar a utilização do serviço de reconhecimento de imagens da AWS, o Amazon Rekognition, através de rotas de API Gateway em uma aplicação serverless na AWS Lambda. Além disso, também utilizaremos o CloudWatch para gravar os logs dos resultados obtidos na análise das imagens. As rotas disponíveis são responsáveis por extrair tags das imagens armazenadas no S3 através do Rekognition e retornar essas informações em formato JSON para a aplicação cliente. As funções Lambda implementadas serão acionadas pela API Gateway, que será responsável por direcionar as requisições HTTP para as funções Lambda apropriadas.
 
 ## Ferramentas
 
@@ -25,6 +25,192 @@ Utilizar do AWS Rekognition para analisar as características de uma imagem salv
   * [API Gateway](https://aws.amazon.com/api-gateway/) serviço para criação, implantação e gerenciamento de APIs.
   * [Lambda](https://aws.amazon.com/lambda/) serviço de computação *serverless* que permite a execução de código sem a preocupação de gerenciar servidores.
 
+## Estrutura do projeto
+```
+visao-computacional/
+│└──handler.py
+│└──serverless.yml
+├── routes/
+│   └── homepage.py
+│   └── v1.py
+│   └── v2.py
+│   └── v3.py
+├── utils/
+│   └── classifyEmotion.py
+│   └── detectFaces.py
+│   └── detectLabels.py
+│   └── getCreationDate.py
+│   └── loadImageS3.py
+│   └── loadVariables.py
+├── templates/
+│   └── index.html
+```
+## Desenvolvimento
+### Rotas
+### /v1/vision:
+
+Essa rota tem como objetivo receber uma imagem armazenada em um bucket S3 e extrair suas tags por meio do serviço Rekognition da AWS. Além disso, ela também faz uso do serviço de log do CloudWatch para gravar as informações da imagem processada e as tags identificadas.
+
+O trecho de código em questão registra as informações de log no CloudWatch, contendo a URL da imagem, o horário de criação e as tags extraídas do Amazon Rekognition. Em seguida, a função retorna um objeto JSON com as mesmas informações das tags, mas em um formato mais legível para o usuário.
+```
+# Log do CloudWatch
+        log_data = {
+            "url_to_image": imageUrl,
+            "created_image": timestamp,
+            "labels": labels
+        }
+        print(json.dumps(log_data))
+        
+        response_data = {
+            "url_to_image": imageUrl,
+            "created_image": timestamp,
+            "labels": [
+                {"Name": label["Name"], "Confidence": label["Confidence"]} for label in labels
+            ]
+        }
+```
+### /v2/vision:
+
+ Essa rota utiliza o serviço de detecção de labels do Amazon Rekognition para identificar as faces presentes na imagem, retornando uma lista com as faces detectadas.
+
+Nesse trecho, a função detectFaces é chamada para detectar as faces na imagem. O resultado da detecção é registrado em um objeto de log que é impresso no console. Em seguida, é verificado se alguma face foi detectada e, se houver, a posição de cada face é registrada em um array. Essas informações são então retornadas como parte da resposta da API.
+```
+# Log do CloudWatch
+        # Chamando faces do Rekognition
+        response = detectFaces(file_path)
+        
+        log_data = {
+            "url_to_image": imageUrl,
+            "created_image": timestamp,
+            "response": response
+        }
+        print(json.dumps(log_data))
+        
+        if response:
+            haveFaces = True
+            positions = [
+                {
+                    "Height": details["BoundingBox"]["Height"],
+                    "Left": details["BoundingBox"]["Left"],
+                    "Top": details["BoundingBox"]["Top"],
+                    "Width": details["BoundingBox"]["Width"]
+                } for details in response
+            ]
+        else:
+            haveFaces = False
+            positions = None
+
+        response_data = {
+            "url_to_image": imageUrl,
+            "created_image": timestamp,
+            "have_faces": haveFaces,
+            "position_faces": positions
+        }
+```
+### /v3/vision:
+
+Essa rota tem como objetivo ...
+```
+```
+
+### Funções
+### classifyEmotion:
+A função recebe detalhes da face de uma imagem e classifica a emoção predominante e sua confiança. Ele percorre a lista de emoções e armazena a confiança de cada emoção em um dicionário. Em seguida, determina a emoção com a maior confiança e retorna seu nome e confiança.
+```
+def classifyEmotion(face_details):
+    emotions = face_details['Emotions']
+    emotion_confidence = {}
+
+    for emotion in emotions:
+        emotion_type = emotion['Type']
+        emotion_confidence[emotion_type] = emotion['Confidence']
+    classified_emotion = max(emotion_confidence, key=emotion_confidence.get)
+    classified_emotion_confidence = emotion_confidence[classified_emotion]
+
+    return classified_emotion, classified_emotion_confidence
+```
+### detectFaces:
+Essa utiliza o cliente boto3 para acessar o serviço Amazon Rekognition e detectar faces em uma imagem passada como parâmetro. A imagem é lida em bytes e passada para o método detect_faces, que retorna detalhes das faces encontradas. Esses detalhes são armazenados em uma variável e retornados pela função.
+```
+import boto3
+
+def detectFaces(image_file):
+    rekognition = boto3.client('rekognition')
+    with open(image_file, 'rb') as f:
+        response = rekognition.detect_faces(
+            Image={
+                'Bytes': f.read()
+            },
+            Attributes=['ALL']
+        )
+    faces = response['FaceDetails']
+    return faces
+
+```
+### detectLabels
+Essa função também utiliza a biblioteca boto3 para chamar o serviço Rekognition da AWS e reconhecer as labels da imagem passada como parâmetro. Em seguida, retorna uma lista com as labels identificadas, com no máximo 10 labels e com uma confiança mínima de 75%.
+```
+import boto3
+
+# Reconhece as labels da imagem
+def detectLabels(image_file):
+    rekognition = boto3.client('rekognition')
+    with open(image_file, 'rb') as f:
+        response = rekognition.detect_labels(
+            Image={
+                'Bytes': f.read()
+            },
+            MaxLabels=10,
+            MinConfidence=75
+        )
+    labels = response['Labels']
+    return labels
+
+```
+### getCreationDate
+Função que retorna a data e hora de criação de um objeto em um bucket do Amazon S3.
+```
+import boto3
+from datetime import datetime
+
+# Fornece a data e o horário da imagem no bucket
+def getCreationDate(bucket_name, object_key):
+    s3 = boto3.client('s3')
+    response = s3.get_object(Bucket=bucket_name, Key=object_key)
+    creation_date = response['LastModified']
+    return creation_date.strftime('%d-%m-%Y %H:%M:%S')
+```
+
+### loadImageS3
+Essa função usa a biblioteca boto3 para baixar uma imagem de um bucket S3 e salvá-la. Retornando o caminho do arquivo onde a imagem foi salva.
+
+```
+import boto3
+
+# Carrega a imagem do S3
+def loadImageS3(bucket, imageName):
+    s3 = boto3.resource('s3')
+    file_path = f'/tmp/{imageName}'
+    s3.Bucket(bucket).download_file(imageName, file_path)
+    return file_path
+
+```
+
+### loadVariables
+Essa função usa a biblioteca json para analisar o corpo do objeto de evento e extrair as variáveis ​​"bucket" e "imageName". A função também cria uma URL de imagem com essas variáveis ​​e retorna todas as variáveis.
+```
+import json
+
+# Carrega as variáveis usadas nas rotas
+def loadVariables(event):
+    body = json.loads(event['body'])
+    bucket = body['bucket']
+    imageName = body['imageName']
+    imageUrl = f"https://{bucket}.s3.amazonaws.com/{imageName}"
+    
+    return bucket, imageName, imageUrl
+```
+
 ## Equipe
 
 - [Davi](https://github.com/davi222-santos)
@@ -32,296 +218,3 @@ Utilizar do AWS Rekognition para analisar as características de uma imagem salv
 - [Josiana](https://github.com/JosianaSilva)
 - [Rafael](https://github.com/Kurokishin)
 
-## Execução (Código Fonte)
-
-Com base nas atividades anteriores realizadas, crie um conjunto de lambdas que irá ser acionado quando uma imagem for postada no S3 e irá rodar o "rekognition" para extrair tags e também utilizaremos o dynamodb para gravar os resultados.
-
-**Especificações**:
-
-A aplicação deverá ser desenvolvida com o framework 'serverless' e deverá seguir a estrutura que já foi desenvolvida neste repo.
-
-Passo a passo para iniciar o projeto:
-
-1. Crie a branch para o seu grupo e efetue o clone
-
-2. Instale o framework serverless em seu computador. Mais informações [aqui](https://www.serverless.com/framework/docs/getting-started)
-
-```json
-npm install -g serverless
-```
-
-3. Gere suas credenciais (AWS Acess Key e AWS Secret) na console AWS pelo IAM. Mais informações [aqui](https://www.serverless.com/framework/docs/providers/aws/guide/credentials/)
-
-4. Em seguida insira as credenciais e execute o comando conforme exemplo:
-
-```json
-serverless config credentials \
-  --provider aws \
-  --key AKIAIOSFODNN7EXAMPLE \
-  --secret wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-```
-
-Também é possivel configurar via [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) executando o comando:
-
-```json
-$ aws configure
-AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
-AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-Default region name [None]: us-east-1
-Default output format [None]: ENTER
-```
-
-#### Observação
-
-As credenciais devem ficar apenas localmente no seu ambiente. Nunca exponha as crendenciais no Readme ou qualquer outro ponto do codigo.
-
-Após executar as instruções acima, o serverless estará pronto para ser utilizado e poderemos publicar a solução na AWS.
-
-5. Para efetuar o deploy da solução na sua conta aws execute (acesse a pasta `visao-computacional`):
-
-```
-$ serverless deploy
-```
-
-Depois de efetuar o deploy, vocẽ terá um retorno parecido com isso:
-
-```bash
-Deploying vision to stage dev (us-east-1)
-
-Service deployed to stack vision-dev (85s)
-
-endpoints:
-  GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-  GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/v1
-  GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/v2
-functions:
-  health: vision-dev-health (2.1 kB)
-  v1Description: vision-dev-v1Description (2.1 kB)
-  v2Description: vision-dev-v2Description (2.1 kB)
-```
-
-6. Abra o browser e confirme que a solução está funcionando colando os 3 endpoints que deixamos como exemplo:
-
-### Rota 1 → Get /
-
-1. Esta rota já está presente no projeto
-2. O retorno rota é:
-
-```json
-  {
-    "message": "Go Serverless v3.0! Your function executed successfully!",
-    "input": {
-        ...(event)
-      }
-  }
-```
-
-3. Status code para sucesso da requisição será `200`
-
-### Rota 2 → Get /v1
-
-1. Esta rota já está presente no projeto
-2. O retorno rota é:
-
-```json
-{
-  "message": "VISION api version 1."
-}
-```
-
-3. Status code para sucesso da requisição será `200`
-
-### Rota 3 → Get /v2
-
-1. Esta rota já está presente no projeto
-2. O retorno rota é:
-
-```json
-{
-  "message": "VISION api version 2."
-}
-```
-
----
-
-Após conseguir rodar o projeto base o objetivo final será divida em três partes:
-
-## Atividade -> Parte 1
-
-### Rota 4 -> Post /v1/vision
-
-Deverá ser criada a rota `/v1/vision` que receberá um post no formato abaixo:
-
-```json
-{
-  "bucket": "mycatphotos",
-  "imageName": "cat.jpg"
-}
-```
-
-- Essa imagem deverá estar no S3 (faça o upload manualmente)
-- Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação. utilize: `print(body)`
-
-Resposta a ser entregue (exatamente neste formato):
-
-```json
-{
-  "url_to_image": "https://mycatphotos/cat.jpg",
-  "created_image": "02-02-2023 17:00:00",
-  "labels": [
-    {
-      "Confidence": 96.59198760986328,
-      "Name": "Animal"
-    },
-    {
-      "Confidence": 96.59198760986328,
-      "Name": "Cat"
-    },
-    {
-      "Confidence": 96.59198760986328,
-      "Name": "Pet"
-    },
-    {
-      "Confidence": 96.59198760986328,
-      "Name": "Siamese"
-    }
-  ]
-}
-```
-
-Dessa maneira essa será a arquitetura a ser impantada em TODA ATIVIDADE será:
-
-![arquitetura-base](./assets/arquitetura-base.png)
-
-Exemplos e docs de referência:
-
-- https://github.com/rjsabia/captionApp (JS)
-- https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/labels.html (Trabalhando com Rótulos)
-- https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/service_code_examples.html (Exemplos de código)
-
-## Atividade -> Parte 2
-
-### Rota 5 -> Post /v2/vision
-
-Deverá ser criada a rota `/v2/vision` que receberá um post no formato abaixo:
-
-```json
-{
-  "bucket": "myphotos",
-  "imageName": "teste.jpg"
-}
-```
-
-- Essa imagem deverá estar no S3 (faça o upload manualmente)
-- Nesta versão deverão ser implementados novos campos de retorno que definirá se nesta imagem encontrou algum rosto e seu posicionamento.
-- Para isso utilize um dos modelos que identificam faces do rekognition.
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação. utilize: `print(body)`
-- Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
-
-Resposta a ser entregue quando houver face (exatamente neste formato):
-
-```json
-{
-  "url_to_image": "https://myphotos/test.jpg",
-  "created_image": "02-02-2023 17:00:00",
-  "have_faces": true,
-  "position_faces": [
-    {
-      "Height": 0.06333330273628235,
-      "Left": 0.1718519926071167,
-      "Top": 0.7366669774055481,
-      "Width": 0.11061699688434601
-    }
-  ]
-}
-```
-
-Resposta a ser entregue quando não houver face (exatamente neste formato):
-
-```json
-{
-  "url_to_image": "https://myphotos/test.jpg",
-  "created_image": "02-02-2023 17:00:00",
-  "have_faces": false,
-  "position_faces": null,
-}
-```
-
-Exemplos e docs de referência:
-
-- https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html (Trabalhando com Faces)
-- https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/service_code_examples.html (Exemplos de código)
-
-## Atividade -> Parte 3
-
-### Rota 6 -> Post /v3/vision
-
-```json
-{
-  "bucket": "myphotos",
-  "imageName": "test-happy.jpg"
-}
-```
-
-- Essa imagem deverá estar no S3 (faça o upload manualmente)
-- Nesta versão deverão ser implementados novos campos de retorno que definirá qual a EMOÇÂO PRINCIPAL classificada pelo modelo (maior confiança).
-- Para isso utilize um dos modelos que identificam faces do rekognition.
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação. utilize: `print(body)`
-- Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
-
-Resposta a ser entregue (exatamente neste formato):
-
-```json
-{
-  "url_to_image": "https://myphotos/test-happy.jpg",
-  "created_image": "02-02-2023 17:00:00",
-  "classified_emotion": "HAPPY",
-  "classified_emotion_condidence": 99.92965151369571686,
-}
-```
-
-Exemplos e docs de referência:
-
-- https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html (Trabalhando com Faces)
-- https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/service_code_examples.html (Exemplos de código)
-
----
-
-## Observações retorno esperado
-
-- os campos de entrada e saida deverão estar nos formatos e com os nomes apresentados.
-- status code para sucesso da requisição será `200`
-- status code para erros deverá ser `500`
-
----
-
-## O que será avaliado?
-
-- Projeto em produção na AWS
-- Em Python conforme projeto base disponibilizado
-- Seguir as atividades na ordem proposta
-- Sobre as rotas:
-  - Possuir em cada rota os retornos esperados (somente campos solicitados conforme especificação)
-- Infra-estrutura como código (evite ações manuais na console)
-- Organização geral do código fonte
-  - Estrutura de pastas
-  - Estrutura da logica de negócio
-  - Divisão de responsabilidades em arquivos/pastas distintos
-  - Otimização do código fonte (evitar duplicações de código)
-- Objetividade do README.md
-
----
-
-## Entrega
-
-- Aceitar o convite do repositório da sprint-8-pb-aws-ifce;
-- **O trabalho deve ser feito em grupos de quatro pessoas**;
-  - Evitar repetições de grupos da sprint anterior;
-- Criar uma branch no repositório com o formato grupo-número (Exemplo: grupo-1);
-- Subir o trabalho na branch com um [Readme.md](README.md)
-  - documentar detalhes sobre como a avaliação foi desenvolvida
-  - dificuldades conhecidas
-  - como utilizar o sistema
-  - 🔨 código fonte desenvolvido (Sugestão: pasta `src`)
-- O prazo de entrega é até às 12h do dia 13/02/2023 no repositório do github ([https://github.com/Compass-pb-aws-2022-IFCE/sprint-8-pb-aws-ifce](https://github.com/Compass-pb-aws-2022-IFCE/sprint-8-pb-aws-ifce)).
