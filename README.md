@@ -9,6 +9,13 @@ Avaliação da oitava sprint do programa de bolsas Compass UOL para formação e
 ## Sumário
 - [Objetivo](#objetivo)
 - [Ferramentas](#ferramentas)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Desenvolvimento](#desenvolvimento)
+    - [Rotas](#rotas)
+    - [Funções](#funções)
+- [Resultado](#resultado)
+- [Impedimentos](#impedimentos)
+- [Conclusão](#conclusão)
 - [Equipe](#equipe)
 
 ---
@@ -20,10 +27,10 @@ Este projeto tem como objetivo demonstrar a utilização do serviço de reconhec
 ## Ferramentas
 
 * [AWS](https://aws.amazon.com/pt/) plataforma de computação em nuvem da Amazon.
-  * [DynamoDB](https://aws.amazon.com/dynamodb/) banco de dados não relacional que oferece rápida e escalável performance.
   * [S3](https://aws.amazon.com/s3/) serviço de armazenamento.
   * [API Gateway](https://aws.amazon.com/api-gateway/) serviço para criação, implantação e gerenciamento de APIs.
   * [Lambda](https://aws.amazon.com/lambda/) serviço de computação *serverless* que permite a execução de código sem a preocupação de gerenciar servidores.
+  * [Rekognition](https://aws.amazon.com/rekognition/) realiza o reconhecimento de imagens e vídeos por meio do aprendizado de máquina.
 
 ## Estrutura do projeto
 ```
@@ -163,8 +170,11 @@ else:
 - ### classifyEmotion:
     Recebe detalhes da face de uma imagem e classifica a emoção predominante e sua confiança. Ela percorre a lista de emoções e armazena a confiança de cada emoção em um dicionário. Em seguida, retorna a emoção com a maior confiança.
 
-## Acesso
-Para utilizar os recursos das rotas acesse este [link](https://n3bay1s6wi.execute-api.us-east-1.amazonaws.com/home). Para testar, você pode usar informações do seu próprio bucket, ou inserir o nome do bucket como "photos-sprint8-davi", e o nome da imagem como "gato.jpg" ou "homem.jpg", pois é um bucket para teste público de um dos integrantes da equipe.
+## Resultado
+Para utilizar os recursos das rotas acesse este [link](https://n3bay1s6wi.execute-api.us-east-1.amazonaws.com/home). Para testar, basta colocar o nome do seu próprio bucket, ou inserir o nome do mesmo como "photos-sprint8-davi" e o nome da imagem como "gato.jpg" ou "homem.jpg", pois é um bucket para teste público de um dos integrantes da equipe.
+
+## Impedimentos
+- Inserir uma imagem no bucket especificado por meio da página html.
 
 ## Conclusão
 A conclusão desta avaliação é extremamente positiva. O desenvolvimento deste projeto nos permitiu aprimorar nossos conhecimentos em serverless, bem como nos recursos da AWS. Além disso, foi proveitoso o trabalho em equipe, o que nos permitiu trocar experiências e ideias para solucionar desafios e aprender uns com os outros.
