@@ -211,6 +211,9 @@ def loadVariables(event):
     return bucket, imageName, imageUrl
 ```
 
+
+## Acesso
+Para utilizar os recursos das rotas acesse este [link](https://n3bay1s6wi.execute-api.us-east-1.amazonaws.com/home). Para testar, você pode usar informações do seu próprio bucket, ou inserir o nome do bucket como "photos-sprint8-davi", e o nome da imagem como "gato.jpg" ou "homem.jpg", pois é um bucket para teste público de um dos integrantes da equipe.
 ## Equipe
 
 - [Davi](https://github.com/davi222-santos)
