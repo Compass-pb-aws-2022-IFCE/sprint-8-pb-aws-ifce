@@ -52,6 +52,13 @@ visao-computacional/
 ├── templates/
 │   └── index.html
 ```
+A organização do código foi definida por meio da divisão de pastas com responsabilidades específicas para facilitar a localização e manutenção das funcionalidades.
+> **routes** possui as rotas juntamente com o encaminhamento para a página de acesso as mesmas na web.
+
+> **utils** contém as funções que permitiram a modularização das rotas.
+
+> **templates** frontend da aplicação.
+
 ## Desenvolvimento
 
 ### Rotas
