@@ -30,9 +30,9 @@ Sendo:
 | ROTA 1 | GET         | Definida no escopo do projeto, status code para sucesso da requisição será 200. |
 | ROTA 2 | GET         | Definida no escopo do projeto, status code para sucesso da requisição será 200. |
 | ROTA 3 | GET         | Definida no escopo do projeto, status code para sucesso da requisição será 200.    |
-| ROTA 4 | POST        | Com a imagem hospedada no S3, o post irá chamar o Rekognition e o resultado(body) da chamada deve estar logado na aplicação através do CloudWatch. |
-| ROTA 5 | POST        | Implementar o post de uma imagem hospedada no S3, é necessário adicionar novos campos de retorno que informem se a imagem contém algum rosto e sua posição. Para isso, é preciso utilizar um modelo de identificação de faces do serviço Rekognition. O post deve chamar o Rekognition para realizar a análise e o resultado da chamada (body) deve ser registrado na aplicação por meio do CloudWatch |
-| ROTA 6 | POST        | Fazer o upload manual de uma imagem no S3 e implementar novos campos de retorno que indiquem a emoção principal detectada pelo modelo de identificação de faces do Rekognition. O resultado da chamada deve ser registrado na aplicação por meio do CloudWatch, exibindo todas as emoções detectadas caso haja mais de uma face na imagem. O post deve chamar o serviço Rekognition para obter essa informação. |
+| ROTA 4 | POST        | Com a imagem hospedada no S3, o post irá chamar o Rekognition e usar a função detect labels passando os nomes do bucket e da imagem para demarcar os elementos encontrados nela e as respectivas taxas de confiança, o resultado(body) da chamada deve será retornado no formato esécíficado e exibido nas logs do CloudWatch. |
+| ROTA 5 | POST        | Essa utiliza as mesmas informações da imagem armazenada no s3 para fazer a requisição, porém utiliza a função detect faces do rekognition, com o objeto de encontrar as posições dos possíveis rostos da imagem. Da mesma forma, o resultado da chamada (body) é registrado na aplicação por meio do CloudWatch |
+| ROTA 6 | POST        | Utiliza as informações sobre a imagem guardada no S3 para detectar atráves da função detect faces do Rekognition a posição, a principal emoção e a taxa de confiabilidade dessa principal emoção em cada rosto. O resultado da chamada deve ser registrado na aplicação por meio do CloudWatch, exibindo todas as emoções detectadas caso haja mais de uma face na imagem. O post deve chamar o serviço Rekognition para obter essa informação. |
 
 ## 💻 Ferramentas, linguagens e tecnologias
 
@@ -44,9 +44,9 @@ Sendo:
 
 ## 😌 Impedimentos resolvidos
 
-- Interpretação inicial da construção, organização do código como também de sua arquitetura em cada rota.
+- Interpretação inicial da construção, organização do código como também de sua arquitetura em cada rota, resolvido com perguntas aos instrutores.
 - Erro na inserção das credenciais e execução do comando  ```"serverless config credentials" ```, resolvido após pesquisa e alteração do  ```"Set-ExecutionPolicy" ``` para o status de ```"RemoteSigned" ``` no PowerShell.
-- Construção das rotas, como também a sua "successfully executed", cada rota haviam erros que foram resolvidos após reuniões,estudo e pequisa.
+- Construção das rotas, como também a sua "successfully executed", cada rota haviam erros que foram resolvidos após reuniões, estudo e pequisa.
 
 ## 📂 Organização do código
 
@@ -68,9 +68,11 @@ Código em Python que define quatro funções para trabalhar com imagens na AWS:
 - get_faces_response();
 - get_image_creation_date(). 
 ```
-Essas funções utilizam os módulos boto3, json e datetime para se comunicar com serviços os da AWS, validar informações de imagem, obter informações de rótulos e faces de uma imagem, e obter a data de criação de uma imagem em um bucket do S3.
+Essas funções utilizam os módulos boto3, json e datetime para se comunicar com serviços os da AWS. A primeira serve para validar a entrada do post, as duas seguintes obtêm informações de rótulos e faces de uma imagem, mas ainda sem o tratamento específico  para a rota, e a última obtém a data de criação de imagem em um bucket do S3.
 
 ## ⚙️ Estrutura das rotas
+
+As rotas possuem esturtura semelhante, diferindo apenas na definição do ```responde_data```, que é o objeto de retorno, pois cada uma delas deve trazer campos específicos.
 
 ### **V1 (ROTA 4)**
 
@@ -122,7 +124,7 @@ Em resumo, o projeto envolvendo o uso da plataforma AWS com Amazon Rekognition, 
 
 Com o Amazon Rekognition é possível analisar imagens e vídeos para detecção e reconhecimento de objetos, cenas, textos e faces. Com ele, é possível identificar, classificar e indexar imagens para pesquisa e organização, além de automatizar tarefas como verificação de identidade, monitoramento de segurança e análise de sentimentos. 
 
-Ao usar o Amazon CloudWatch em conjunto com o Amazon Rekognition, é possível visualizar métricas importantes, como o número de solicitações de análise de imagem por minuto, o número de análises de imagem bem-sucedidas e o tempo médio de resposta.
+Ao usar o Amazon CloudWatch em conjunto com o Amazon Rekognition, é possível visualizar métricas importantes, como o número de solicitações de análise de imagem por minuto, o número de análises de imagem bem-sucedidas e o tempo médio de resposta, além de é claro, o detalhamento dos erros, que é de grande valia para corrigí-los.
 
 Portanto, os serviços da AWS, como o Rekognition, fornecem recursos poderosos de processamento de imagem e reconhecimento de padrões para diversas aplicações. Ao integrar o Amazon CloudWatch, é possível monitorar e analisar o desempenho das aplicações. Essa integração é importante para garantir a qualidade do serviço oferecido, bem como para auxiliar no gerenciamento de custos e na tomada de decisões estratégicas.
 
