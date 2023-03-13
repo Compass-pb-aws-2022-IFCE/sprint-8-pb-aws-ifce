@@ -52,7 +52,7 @@ visao-computacional/
 Essa rota tem como objetivo receber uma imagem armazenada em um bucket S3 e extrair suas tags por meio do serviço Rekognition da AWS. Além disso, ela também faz uso do serviço de log do CloudWatch para gravar as informações da imagem processada e as tags identificadas.
 
 O trecho de código em questão registra as informações de log no CloudWatch, contendo a URL da imagem, o horário de criação e as tags extraídas do Amazon Rekognition. Em seguida, a função retorna um objeto JSON com as mesmas informações das tags, mas em um formato mais legível para o usuário.
-```
+```py
 # Log do CloudWatch
         log_data = {
             "url_to_image": imageUrl,
@@ -74,7 +74,7 @@ O trecho de código em questão registra as informações de log no CloudWatch, 
  Essa rota utiliza o serviço de detecção de labels do Amazon Rekognition para identificar as faces presentes na imagem, retornando uma lista com as faces detectadas.
 
 Nesse trecho, a função detectFaces é chamada para detectar as faces na imagem. O resultado da detecção é registrado em um objeto de log que é impresso no console. Em seguida, é verificado se alguma face foi detectada e, se houver, a posição de cada face é registrada em um array. Essas informações são então retornadas como parte da resposta da API.
-```
+```py
 # Log do CloudWatch
         # Chamando faces do Rekognition
         response = detectFaces(file_path)
@@ -109,8 +109,34 @@ Nesse trecho, a função detectFaces é chamada para detectar as faces na imagem
 ```
 ### /v3/vision:
 
-Essa rota tem como objetivo ...
+A função dessa rota é retornar a posição das faces assim como a emoção principal que as mesmas possuem para registrar as informações no CloudWatch. Tal requisito foi especificado pela quantidade de rostos identificados.
+
+Quando nenhuma face é identificada, *none* é retornado nos parâmetros.
+```py
+if len(faces_response) == 0:
+    response_data['faces'].append({
+        'position': {'Height': None, 'Left': None, 'Top': None, 'Width': None},
+        'classified_emotion': None,
+        'classified_emotion_confidence': None
+    })
 ```
+
+Para somente uma face a saída retorna os campos especificados acima com seus devidos valores e utiliza da função [classifyEmotion](#classifyemotion) para retornar a emoção principal e a taxa de confiança dela.
+```py
+elif len(faces_response) == 1:
+    face_details = faces_response[0]
+    classified_emotion, classified_emotion_confidence = classifyEmotion(face_details)
+    position = face_details['BoundingBox']
+    response_data['faces'].append({...})
+```
+
+Já para os casos com mais de um rosto detectado foi criado um laço para percorrer os objetos de cada face e retornar os campos citados.
+```py
+else:
+    for face_details in faces_response:
+        classified_emotion, classified_emotion_confidence = classifyEmotion(face_details)
+        position = face_details['BoundingBox']
+        response_data['faces'].append({...})
 ```
 
 ### Funções
