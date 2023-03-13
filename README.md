@@ -178,7 +178,9 @@ else:
     Recebe detalhes da face de uma imagem e classifica a emoção predominante e sua confiança. Ela percorre a lista de emoções e armazena a confiança de cada emoção em um dicionário. Em seguida, retorna a emoção com a maior confiança.
 
 ## Resultado
-Para utilizar os recursos das rotas entre em contato com a equipe para disponibilizarmos o link.
+Para utilizar os recursos das rotas acesse este [link](https://n3bay1s6wi.execute-api.us-east-1.amazonaws.com/home). Para testar, basta colocar o nome do seu próprio bucket, ou inserir o nome do mesmo como "photos-sprint8-davi" e o nome da imagem como "gato.jpg" ou "homem.jpg", pois é um bucket para teste público de um dos integrantes da equipe.
+
+Lembrando que o link somente será habilitado para uso no dia da avaliação ou após contatar a equipe.
 
 ## Impedimentos
 - Inserir uma imagem no bucket especificado por meio da página html.
