@@ -6,7 +6,7 @@ document.getElementById("submitBtn").addEventListener("click", function (event) 
     const routeSelect = document.getElementById("routeSelect").value;
     const xhr = new XMLHttpRequest();
 
-    // Abre a requisição POST para a rota escolhida
+    // Abre a requisição POST para a rota escolhida pelo select
     xhr.open("POST", `/${routeSelect}/vision`, true);
     xhr.setRequestHeader("Content-Type", "application/json");
 
