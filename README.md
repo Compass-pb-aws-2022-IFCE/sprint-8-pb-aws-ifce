@@ -3,21 +3,21 @@
 
 ## 📌 Tópicos 
 
-- [📝 Descrição do projeto](#-descrição-do-projeto)
+- [📝 Descrição do projeto](#📝-descrição-do-projeto)
 
-- [💻 Ferramentas e Tecnologias](#-ferramentas-e-tecnologias)
+- [💻 Ferramentas e Tecnologias](#💻-ferramentas-linguagens-e-tecnologias)
 
-- [😌 Impedimentos resolvidos](#-impedimentos-resolvidos)
+- [😌 Impedimentos resolvidos](#😌-impedimentos-resolvidos)
 
-- [📂 Organização do código](#-organização-do-código)
+- [📂 Organização do código](#📂-organização-do-código)
 
-- [⬇️ Arquivo functions.py](#-arquivo-functionspy)
+- [⬇️ Arquivo functions.py](#⬇️-arquivo-functionspy)
 
-- [⚙️ Estrutura das rotas](#-estrutura-das-rotas)
+- [⚙️ Estrutura das rotas](#⚙️-estrutura-das-rotas)
 
-- [📤 Deploy](#-deploy)
+- [📤 Deploy](#📤-deploy)
 
-- [📌 Considerações finais](#-considerações-finais)
+- [📌 Considerações finais](#📌-considerações-finais)
 
 ## 📝 Descrição do projeto
 
