@@ -214,6 +214,12 @@ def loadVariables(event):
 
 ## Acesso
 Para utilizar os recursos das rotas acesse este [link](https://n3bay1s6wi.execute-api.us-east-1.amazonaws.com/home). Para testar, você pode usar informações do seu próprio bucket, ou inserir o nome do bucket como "photos-sprint8-davi", e o nome da imagem como "gato.jpg" ou "homem.jpg", pois é um bucket para teste público de um dos integrantes da equipe.
+
+## Conclusão
+A conclusão desta avaliação é extremamente positiva. O desenvolvimento deste projeto nos permitiu aprimorar nossos conhecimentos em serverless, bem como nos recursos da AWS. Além disso, foi proveitoso o trabalho em equipe, o que nos permitiu trocar experiências e ideias para solucionar desafios e aprender uns com os outros.
+
+Ao finalizar este projeto, foi visível a evolução de cada membro da equipe em relação a avaliação passada sobre o mesmo assunto, demonstrando que estamos constantemente em busca de evolução e aprimoramento em nossas habilidades e conhecimentos.
+
 ## Equipe
 
 - [Davi](https://github.com/davi222-santos)
