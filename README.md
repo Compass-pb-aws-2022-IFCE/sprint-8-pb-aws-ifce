@@ -46,70 +46,72 @@ visao-computacional/
 │   └── index.html
 ```
 ## Desenvolvimento
+
 ### Rotas
+
 ### /v1/vision:
 
 Essa rota tem como objetivo receber uma imagem armazenada em um bucket S3 e extrair suas tags por meio do serviço Rekognition da AWS. Além disso, ela também faz uso do serviço de log do CloudWatch para gravar as informações da imagem processada e as tags identificadas.
 
-O trecho de código em questão registra as informações de log no CloudWatch, contendo a URL da imagem, o horário de criação e as tags extraídas do Amazon Rekognition. Em seguida, a função retorna um objeto JSON com as mesmas informações das tags, mas em um formato mais legível para o usuário.
+O trecho de código em questão registra as informações de log no CloudWatch, contendo a URL da imagem, o horário de criação e as tags extraídas do Amazon Rekognition pela função [detectLabels](#detectlabels). Em seguida, a função retorna um objeto JSON com as mesmas informações das tags, mas em um formato mais legível para o usuário.
 ```py
+labels = detectLabels('/tmp/' + imageName)
+
 # Log do CloudWatch
-        log_data = {
-            "url_to_image": imageUrl,
-            "created_image": timestamp,
-            "labels": labels
-        }
-        print(json.dumps(log_data))
-        
-        response_data = {
-            "url_to_image": imageUrl,
-            "created_image": timestamp,
-            "labels": [
-                {"Name": label["Name"], "Confidence": label["Confidence"]} for label in labels
-            ]
-        }
+log_data = {
+    "url_to_image": imageUrl,
+    "created_image": timestamp,
+    "labels": labels
+}
+print(json.dumps(log_data))
+
+response_data = {
+    "url_to_image": imageUrl,
+    "created_image": timestamp,
+    "labels": [
+        {"Name": label["Name"], "Confidence": label["Confidence"]} for label in labels
+    ]
+}
 ```
 ### /v2/vision:
 
- Essa rota utiliza o serviço de detecção de labels do Amazon Rekognition para identificar as faces presentes na imagem, retornando uma lista com as faces detectadas.
+Essa rota utiliza o serviço de detecção de labels do Amazon Rekognition para identificar as faces presentes na imagem, retornando uma lista com as faces detectadas.
 
 Nesse trecho, a função [detectFaces](#detectfaces) é chamada para detectar as faces na imagem. O resultado da detecção é registrado em um objeto de log que é impresso no console. Em seguida, é verificado se alguma face foi detectada e, se houver, a posição de cada face é registrada em um array. Essas informações são então retornadas como parte da resposta da API.
 ```py
-# Log do CloudWatch
-        # Chamando faces do Rekognition
-        response = detectFaces(file_path)
-        
-        log_data = {
-            "url_to_image": imageUrl,
-            "created_image": timestamp,
-            "response": response
-        }
-        print(json.dumps(log_data))
-        
-        if response:
-            haveFaces = True
-            positions = [
-                {
-                    "Height": details["BoundingBox"]["Height"],
-                    "Left": details["BoundingBox"]["Left"],
-                    "Top": details["BoundingBox"]["Top"],
-                    "Width": details["BoundingBox"]["Width"]
-                } for details in response
-            ]
-        else:
-            haveFaces = False
-            positions = None
+response = detectFaces(file_path)
 
-        response_data = {
-            "url_to_image": imageUrl,
-            "created_image": timestamp,
-            "have_faces": haveFaces,
-            "position_faces": positions
-        }
+log_data = {
+    "url_to_image": imageUrl,
+    "created_image": timestamp,
+    "response": response
+}
+print(json.dumps(log_data))
+
+if response:
+    haveFaces = True
+    positions = [
+        {
+            "Height": details["BoundingBox"]["Height"],
+            "Left": details["BoundingBox"]["Left"],
+            "Top": details["BoundingBox"]["Top"],
+            "Width": details["BoundingBox"]["Width"]
+        } for details in response
+    ]
+else:
+    haveFaces = False
+    positions = None
+
+response_data = {
+    "url_to_image": imageUrl,
+    "created_image": timestamp,
+    "have_faces": haveFaces,
+    "position_faces": positions
+}
 ```
 ### /v3/vision:
 
-A função dessa rota é retornar a posição das faces assim como a emoção principal que as mesmas possuem para registrar as informações no CloudWatch. Tal requisito foi especificado pela quantidade de rostos identificados, sendo utilizado da função [detectFaces](#detectfaces).
+A função dessa rota é retornar a posição das faces assim como a emoção principal que as mesmas possuem para registrar as informações no CloudWatch. Tal requisito foi especificado pela quantidade de rostos identificados, sendo utilizado a função [detectFaces](#detectfaces).
 
 Quando nenhuma face é identificada, *none* é retornado nos parâmetros.
 ```py
