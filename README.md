@@ -31,9 +31,12 @@ ROTA 6 → Para realizar a tarefa de detectar a emoção principal em uma imagem
 
 
 ## 🚫 Impedimentos
--
--
--
+#### Dentre os principais impedimentos enfretados podemos elencar
+
+- Configuração inadequada para Amazon Rekognition e o CloudWatch pois  eles possam trabalhar juntos. Se a configuração estiver incorreta, pode resultar em erros e problemas de desempenho.
+- Integração com outras ferramentas pois o projeto precisar se integrar com outras ferramentas, como serviços de terceiros ou APIs, podem surgir problemas de compatibilidade e integração.
+- Reaproveitamento de código no desenvolvimento de Rotas, visto a duplicidade de funcionalidades nas 3 rotas desenvolvidas
+
 <br/>
 
 ## ✔️ Conclusão
