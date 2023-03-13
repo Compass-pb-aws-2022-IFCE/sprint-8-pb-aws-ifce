@@ -2,298 +2,126 @@
 
 Avaliação da oitava sprint do programa de bolsas Compass.uol para formação em machine learning para AWS.
 
----
-
-## Execução (Código Fonte)
-
-Com base nas atividades anteriores realizadas, crie um conjunto de lambdas que irá ser acionado quando uma imagem for postada no S3 e irá rodar o "rekognition" para extrair tags e também utilizaremos o dynamodb para gravar os resultados.
-
-**Especificações**:
-
-A aplicação deverá ser desenvolvida com o framework 'serverless' e deverá seguir a estrutura que já foi desenvolvida neste repo.
-
-Passo a passo para iniciar o projeto:
-
-1. Crie a branch para o seu grupo e efetue o clone
-
-2. Instale o framework serverless em seu computador. Mais informações [aqui](https://www.serverless.com/framework/docs/getting-started)
-
-```json
-npm install -g serverless
-```
-
-3. Gere suas credenciais (AWS Acess Key e AWS Secret) na console AWS pelo IAM. Mais informações [aqui](https://www.serverless.com/framework/docs/providers/aws/guide/credentials/)
-
-4. Em seguida insira as credenciais e execute o comando conforme exemplo:
-
-```json
-serverless config credentials \
-  --provider aws \
-  --key AKIAIOSFODNN7EXAMPLE \
-  --secret wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-```
-
-Também é possivel configurar via [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) executando o comando:
-
-```json
-$ aws configure
-AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
-AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-Default region name [None]: us-east-1
-Default output format [None]: ENTER
-```
-
-#### Observação
-
-As credenciais devem ficar apenas localmente no seu ambiente. Nunca exponha as crendenciais no Readme ou qualquer outro ponto do codigo.
-
-Após executar as instruções acima, o serverless estará pronto para ser utilizado e poderemos publicar a solução na AWS.
-
-5. Para efetuar o deploy da solução na sua conta aws execute (acesse a pasta `visao-computacional`):
-
-```
-$ serverless deploy
-```
-
-Depois de efetuar o deploy, vocẽ terá um retorno parecido com isso:
-
-```bash
-Deploying vision to stage dev (us-east-1)
-
-Service deployed to stack vision-dev (85s)
-
-endpoints:
-  GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-  GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/v1
-  GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/v2
-functions:
-  health: vision-dev-health (2.1 kB)
-  v1Description: vision-dev-v1Description (2.1 kB)
-  v2Description: vision-dev-v2Description (2.1 kB)
-```
-
-6. Abra o browser e confirme que a solução está funcionando colando os 3 endpoints que deixamos como exemplo:
-
-### Rota 1 → Get /
-
-1. Esta rota já está presente no projeto
-2. O retorno rota é:
-
-```json
-  {
-    "message": "Go Serverless v3.0! Your function executed successfully!",
-    "input": {
-        ...(event)
-      }
-  }
-```
-
-3. Status code para sucesso da requisição será `200`
-
-### Rota 2 → Get /v1
-
-1. Esta rota já está presente no projeto
-2. O retorno rota é:
-
-```json
-{
-  "message": "VISION api version 1."
-}
-```
-
-3. Status code para sucesso da requisição será `200`
-
-### Rota 3 → Get /v2
-
-1. Esta rota já está presente no projeto
-2. O retorno rota é:
-
-```json
-{
-  "message": "VISION api version 2."
-}
-```
+![Logo_CompassoUOL_Positivo](https://user-images.githubusercontent.com/94761781/212589731-3d9e9380-e9ea-4ea2-9f52-fc6595f8d3f0.png)
 
 ---
 
-Após conseguir rodar o projeto base o objetivo final será divida em três partes:
+## Tópicos
+- [🧪 Tecnologias](#🧪-tecnologias)
+- [📝Organização e descrição do código](#📝organização-e-descrição-do-código)
+- [🎨 Execução](#🎨-execução)
+- [💔 Impedimentos](#💔-impedimentos)
+- [👥 Equipe](#👥-equipe)
+ ---
+## 🧪 Tecnologias
 
-## Atividade -> Parte 1
+### Linguagens:
+- HTML/CSS
+- Javascript
+- Python
 
-### Rota 4 -> Post /v1/vision
+### Serviços AWS:
+- Serverless
+- Rekognition
+- Lambda
+- Api Gateway
+- S3
 
-Deverá ser criada a rota `/v1/vision` que receberá um post no formato abaixo:
+---
+## 📝Organização e descrição do código 
+<br>
 
-```json
-{
-  "bucket": "mycatphotos",
-  "imageName": "cat.jpg"
-}
-```
+![img](https://imgur.com/RRIAaVc.png)
 
-- Essa imagem deverá estar no S3 (faça o upload manualmente)
-- Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação. utilize: `print(body)`
+#### Pastas:
+- ```src```: pasta principal do projeto
+- ```templates```: armazena os arquivos HTML e a pasta ```static```
+- ```static```: armazena o arquivo de estilo e o script responsável pela solicitação HTTP
+- ```utils```: armazena o arquivo functions.py que possui as funções que serão utilizadas nos handlers.
 
-Resposta a ser entregue (exatamente neste formato):
-
-```json
-{
-  "url_to_image": "https://mycatphotos/cat.jpg",
-  "created_image": "02-02-2023 17:00:00",
-  "labels": [
-    {
-      "Confidence": 96.59198760986328,
-      "Name": "Animal"
-    },
-    {
-      "Confidence": 96.59198760986328,
-      "Name": "Cat"
-    },
-    {
-      "Confidence": 96.59198760986328,
-      "Name": "Pet"
-    },
-    {
-      "Confidence": 96.59198760986328,
-      "Name": "Siamese"
-    }
-  ]
-}
-```
-
-Dessa maneira essa será a arquitetura a ser impantada em TODA ATIVIDADE será:
-
-![arquitetura-base](./assets/arquitetura-base.png)
-
-Exemplos e docs de referência:
-
-- https://github.com/rjsabia/captionApp (JS)
-- https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/labels.html (Trabalhando com Rótulos)
-- https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/service_code_examples.html (Exemplos de código)
-
-## Atividade -> Parte 2
-
-### Rota 5 -> Post /v2/vision
-
-Deverá ser criada a rota `/v2/vision` que receberá um post no formato abaixo:
-
-```json
-{
-  "bucket": "myphotos",
-  "imageName": "teste.jpg"
-}
-```
-
-- Essa imagem deverá estar no S3 (faça o upload manualmente)
-- Nesta versão deverão ser implementados novos campos de retorno que definirá se nesta imagem encontrou algum rosto e seu posicionamento.
-- Para isso utilize um dos modelos que identificam faces do rekognition.
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação. utilize: `print(body)`
-- Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
-
-Resposta a ser entregue quando houver face (exatamente neste formato):
-
-```json
-{
-  "url_to_image": "https://myphotos/test.jpg",
-  "created_image": "02-02-2023 17:00:00",
-  "have_faces": true,
-  "position_faces": [
-    {
-      "Height": 0.06333330273628235,
-      "Left": 0.1718519926071167,
-      "Top": 0.7366669774055481,
-      "Width": 0.11061699688434601
-    }
-  ]
-}
-```
-
-Resposta a ser entregue quando não houver face (exatamente neste formato):
-
-```json
-{
-  "url_to_image": "https://myphotos/test.jpg",
-  "created_image": "02-02-2023 17:00:00",
-  "have_faces": false,
-  "position_faces": null,
-}
-```
-
-Exemplos e docs de referência:
-
-- https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html (Trabalhando com Faces)
-- https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/service_code_examples.html (Exemplos de código)
-
-## Atividade -> Parte 3
-
-### Rota 6 -> Post /v3/vision
-
-```json
-{
-  "bucket": "myphotos",
-  "imageName": "test-happy.jpg"
-}
-```
-
-- Essa imagem deverá estar no S3 (faça o upload manualmente)
-- Nesta versão deverão ser implementados novos campos de retorno que definirá qual a EMOÇÂO PRINCIPAL classificada pelo modelo (maior confiança).
-- Para isso utilize um dos modelos que identificam faces do rekognition.
-- O resultado (body) da chamada do Rekognition deverá ser logado na aplicação. utilize: `print(body)`
-- Dessa forma esse post deverá chamar o rekognition para nos entregar o seguinte retorno
-
-Resposta a ser entregue (exatamente neste formato):
-
-```json
-{
-  "url_to_image": "https://myphotos/test-happy.jpg",
-  "created_image": "02-02-2023 17:00:00",
-  "classified_emotion": "HAPPY",
-  "classified_emotion_condidence": 99.92965151369571686,
-}
-```
-
-Exemplos e docs de referência:
-
-- https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html (Trabalhando com Faces)
-- https://docs.aws.amazon.com/pt_br/rekognition/latest/dg/service_code_examples.html (Exemplos de código)
+#### Arquivos:
+- ```index-head``` e ```index-body.html```: separação do ```<head>``` e ```<body>``` do arquivo html para montagem do site da rota /menu. Mais detalhes em ```handler.py```
+- ```styles.css```: arquivo de estilos do site html
+- ```scripts.js```: aqui se encontra o script responsável por capturar a resposta do usuário e fazer uma requisição HTTP para a rota selecionada, gerando um evento que será capturado pela função payload. Mais detalhes em ```functions.py```
+- ```functions.py```: aqui são definidas as funções que tratam de capturar o evento javascript, realizar a lógica por trás de cada uma das três rotas do projeto (detectObject, detectFaces e detectFacesEmotions) e o retorno específico de cada rota
+- ```handler.py```: arquivo onde são definidas as funções que serão executadas em cada rota pelo arquivo ```serverless.yml```. Foram adicionadas ao projeto original as funções mainpage, v1_vision, v2_vision e v3_vision, tratando, respectivamente, do site principal e das 3 rotas post.
 
 ---
 
-## Observações retorno esperado
+## 🎨 Execução 
 
-- os campos de entrada e saida deverão estar nos formatos e com os nomes apresentados.
-- status code para sucesso da requisição será `200`
-- status code para erros deverá ser `500`
+### Rota /menu (Mainpage HTML)
+
+Nesta rota encontra-se o site HTML onde o usuário poderá inserir o nome da imagem, selecionar uma das 3 rotas POST através de um seletor e, ao clicar em "Enviar", é realizada a requisição para a rota escolhida, retornando um JSON com os resultados abaixo do botão.
+
+![img](https://imgur.com/8nNcjcM.png) 
+
+### Rota v1/vision (Detecção de Objetos)
+
+Esta rota analisa a presença de objetos na imagem, incluindo desde pessoas e animais até objetos cotidianos, prédios, árvores, etc.
+Ao realizar a requisição, Deverá ser retornada a url da imagem no s3, a data em que a imagem foi postada no s3 e uma lista de objetos reconhecidos pelo Rekognition, assim como a porcentagem de confiança de cada um deles, da seguinte forma:
+
+![img](https://imgur.com/dATCYXb.png)
+
+### Rota v2/vision (Detecção de Faces)
+
+Esta rota realizará a detecção de faces em uma imagem, buscando a presença ou não de uma ou mais faces. Deverá retornar a url da imagem no s3, a data em que a imagem foi postada no s3 e se há alguma face na imagem assim como a sua posição
+
+![img](https://imgur.com/l3K2ufv.png)
+
+Em caso de nenhuma face encontrada, todos os dados da detecção são definidos como "null".
+
+![img](https://imgur.com/dPdl494.png)
+
+### Rota v3/vision (Detecção de Emoções)
+
+Esta rota realizará a detecção de emoções nas faces de uma imagem, buscando a presença ou não de uma ou mais faces. Deverá retornar a url da imagem no s3, a data em que a imagem foi postada no s3 e, caso haja uma face, uma lista com as posições de cada face, assim como a emoção reconhecida e a porcentagem de confiança do reconhecimento. 
+
+![img](https://imgur.com/jO5ZSxl.png) 
+
+Em caso de nenhuma face encontrada, todos os dados de detecção são definidos como "null".
+
+![img](https://imgur.com/7DEid5h.png) 
+
+### ✏ Requisições manuais
+
+Também é possível realizar manualmente as requisições enviando uma requisição POST com o seguinte JSON (o corpo é o mesmo para as três rotas):
+```
+{
+  "bucket": "imagens-grupo1",
+  "imageName": "imagem.extensão"
+}
+```
+Basta substituir o nome da imagem por um nome de imagem + extensão (jpg, png, etc.) inserido no S3 e enviar a requisição. Deverá ser retornado um JSON com os dados retornados pelo Rekognition para cada rota. Aqui está um exemplo com o software Postman para a rota v1/vision:
+
+![img](https://imgur.com/eXZ6G1r.png)
+
+A lógica é a mesma para as demais rotas:
+
+![img](https://imgur.com/VwZP8dB.png)
+![img](https://imgur.com/kawCkxb.png)
+
+### Logs:
+
+Rota v1/vision:
+![img](https://imgur.com/Q9QF0xc.png)
+
+Rota v2/vision:
+![img](https://imgur.com/xDFbFiB.png)
+
+Rota v3/vision:
+![img](https://imgur.com/aE8O1ad.png)
 
 ---
 
-## O que será avaliado?
+## 💔 Impedimentos
 
-- Projeto em produção na AWS
-- Em Python conforme projeto base disponibilizado
-- Seguir as atividades na ordem proposta
-- Sobre as rotas:
-  - Possuir em cada rota os retornos esperados (somente campos solicitados conforme especificação)
-- Infra-estrutura como código (evite ações manuais na console)
-- Organização geral do código fonte
-  - Estrutura de pastas
-  - Estrutura da logica de negócio
-  - Divisão de responsabilidades em arquivos/pastas distintos
-  - Otimização do código fonte (evitar duplicações de código)
-- Objetividade do README.md
+- Leitura dos arquivos estáticos (estilos css e scripts javascript) pelo serverless.
 
 ---
 
-## Entrega
-
-- Aceitar o convite do repositório da sprint-8-pb-aws-ifce;
-- **O trabalho deve ser feito em grupos de quatro pessoas**;
-  - Evitar repetições de grupos da sprint anterior;
-- Criar uma branch no repositório com o formato grupo-número (Exemplo: grupo-1);
-- Subir o trabalho na branch com um [Readme.md](README.md)
-  - documentar detalhes sobre como a avaliação foi desenvolvida
-  - dificuldades conhecidas
-  - como utilizar o sistema
-  - 🔨 código fonte desenvolvido (Sugestão: pasta `src`)
-- O prazo de entrega é até às 12h do dia 13/02/2023 no repositório do github ([https://github.com/Compass-pb-aws-2022-IFCE/sprint-8-pb-aws-ifce](https://github.com/Compass-pb-aws-2022-IFCE/sprint-8-pb-aws-ifce)).
+## 👥 Equipe
+- [Nicolas Ferreira](https://github.com/Niccofs)
+- [Herisson Hyan](https://github.com/herissonhyan)
+- [Rangel Melo](https://github.com/Rangelmello)
+- [Luiz Carlos](https://github.com/luiz2CC)

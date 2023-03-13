@@ -10,6 +10,13 @@ provider:
         - "rekognition:DetectLabels"
         - "rekognition:DetectFaces"
       Resource: "*"
+    - Effect: Allow
+      Action:
+        - "s3:GetObject"
+        - "s3:ListBucket"
+        - "s3:PutObject"
+        - "s3:ListObjects"
+      Resource: "arn:aws:s3:::imagens-grupo1/*"
 
 functions:
   health:
